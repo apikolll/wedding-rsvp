@@ -1,0 +1,36 @@
+import Image from "next/image";
+import React from "react";
+
+const Hero = () => {
+  return (
+    <section className="relative">
+      <Image
+        src={"/flowers/flower_1.svg"}
+        alt="flower_1"
+        width={100}
+        height={100}
+        className="w-35 absolute left-0 top-10"
+      />
+
+      <Image
+        src={"/flowers/flower_2.svg"}
+        alt="flower_2"
+        width={100}
+        height={100}
+        className="w-50 absolute right-0 top-8"
+      />
+
+      <h1 className="font-serif uppercase text-center text-[16px] tracking-wider text-muted-foreground">
+        Together with their families
+      </h1>
+
+      <div className="flex flex-col items-center px-12 mt-15 gap-12">
+        <h1 className="font-samantha text-5xl self-start ml-5">Afiq</h1>
+        <p className="font-samantha text-4xl">&</p>
+        <h1 className="font-samantha text-5xl self-end">Athirah</h1>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;
