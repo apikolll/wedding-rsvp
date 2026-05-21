@@ -2,6 +2,8 @@ import CountDown from "@/section/CountDown";
 import DateDetails from "@/section/DateDetails";
 import Hero from "@/section/Hero";
 import InvitationDetails from "@/section/InvitationDetails";
+import Location from "@/section/Location";
+import Rsvp from "@/section/Rsvp";
 import WeddingItenary from "@/section/WeddingItinerary";
 import Image from "next/image";
 
@@ -22,6 +24,8 @@ export default function Home() {
       <CountDown />
       <WeddingItenary />
       <InvitationDetails />
+      <Location />
+      <Rsvp />
     </main>
   );
 }

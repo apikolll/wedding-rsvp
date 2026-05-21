@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 
 const InvitationDetails = () => {
   return (
-    <section id="invitation-details" className="mt-20 h-screen">
+    <section id="invitation-details" className="mt-20">
       <div className="flex flex-col items-center">
         <h1 className="font-serif font-medium text-center text-2xl text-[#626262]">
           Walimatul Urus
@@ -14,7 +14,7 @@ const InvitationDetails = () => {
           Anakanda kepada
         </p>
 
-        <div className="font-samantha flex flex-col gap-6 text-xl items-center my-10">
+        <div className="font-samantha flex flex-col gap-6 text-lg items-center my-10">
           <h1>Hj Noorazam Bin Ismail</h1>
           <p>&</p>
           <h1>Hjh Nooriah Binti Yusoff</h1>
@@ -28,7 +28,7 @@ const InvitationDetails = () => {
           <p>hadir ke majlis perkahwinan anakanda kami</p>
         </div>
 
-        <div className="font-allura flex flex-col gap-6 text-3xl items-center my-10 font-bold">
+        <div className="font-allura flex flex-col gap-6 text-2xl items-center my-10 font-bold">
           <h1>Afiq Danial bin Noorazam</h1>
           <p>&</p>
           <h1>Nur Athirah Binti Ahmad Faisal</h1>
