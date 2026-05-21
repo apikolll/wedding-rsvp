@@ -10,6 +10,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 
 import localFont from "next/font/local";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -69,7 +70,10 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <main>{children}</main>
+        <Toaster />
+      </body>
     </html>
   );
 }

@@ -1,7 +1,10 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldContent,
+  FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldTitle,
@@ -11,10 +14,48 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 
 import Flower from "@/public/flowers/flower_5.svg";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+
+import { z } from "zod";
+
+const schema = z.object({
+  name: z.string("Name is required."),
+  status: z.enum(["accept", "decline"]),
+  pax: z.number().min(1, "Minimum pax is 1.").max(3, "Maximum pax is 3."),
+  notes: z.string().nullable(),
+});
 
 const Rsvp = () => {
+  const methods = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: undefined,
+      status: "accept",
+      pax: 0,
+      notes: "",
+    },
+    mode: "onChange",
+  });
+
+  const {
+    control,
+    formState: { isSubmitting },
+    handleSubmit,
+  } = methods;
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      console.log(data);
+      toast.success(JSON.stringify(data));
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
   return (
-    <section id="rsvp" className="bg-card mt-10 pb-20">
+    <section id="rsvp" className="bg-card mt-10 pb-20 overflow-hidden">
       <div className="text-center pt-15 flex flex-col gap-4 relative">
         <p className="uppercase tracking-[3px] text-[10px] text-[#6B6258]">
           kindly respond
@@ -28,106 +69,172 @@ const Rsvp = () => {
 
       {/* RSVP Form  */}
       <div className="px-5 mt-6">
-        <FieldGroup>
-          <Field>
-            <FieldLabel
-              htmlFor="name"
-              className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
+        <FormProvider {...methods}>
+          <form onSubmit={onSubmit}>
+            <FieldGroup>
+              <Controller
+                name="name"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <Field>
+                    <FieldLabel
+                      htmlFor="name"
+                      className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
+                    >
+                      Your name
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      autoComplete="off"
+                      placeholder="Athirah"
+                      className="bg-[#FFFDF380] rounded-sm py-5 border border-[#2A272220] placeholder:text-sm text-sm"
+                      aria-invalid={!!error}
+                    />
+                    {error && (
+                      <FieldDescription className="text-red-500 text-[10px]">
+                        {error.message}
+                      </FieldDescription>
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Field>
+                <FieldLabel
+                  htmlFor="name"
+                  className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
+                >
+                  Will you attend ?
+                </FieldLabel>
+
+                <Controller
+                  name="status"
+                  control={control}
+                  render={({ field }) => (
+                    <RadioGroup
+                      defaultValue={field.value}
+                      className="flex gap-3 justify-center max-w-sm mx-auto"
+                      onValueChange={(val) => {
+                        field.onChange(val);
+                      }}
+                    >
+                      <FieldLabel
+                        htmlFor="rsvp-accept"
+                        className="flex-1 justify-center has-data-[state=checked]:bg-[#2A2722] has-data-[state=checked]:text-[#FFFDF3]"
+                      >
+                        <Field className="items-center text-center cursor-pointer flex-1 border-[#2A2722] border rounded-sm">
+                          <FieldContent className="items-center justify-center">
+                            <FieldTitle className="uppercase text-[12px] tracking-[1px]">
+                              Joyfully Accept
+                            </FieldTitle>
+                          </FieldContent>
+                          <RadioGroupItem
+                            value="accept"
+                            id="rsvp-accept"
+                            hidden
+                          />
+                        </Field>
+                      </FieldLabel>
+
+                      <FieldLabel
+                        htmlFor="rsvp-decline"
+                        className="flex-1 justify-between has-data-[state=checked]:bg-[#2A2722] has-data-[state=checked]:text-[#FFFDF3]"
+                      >
+                        <Field className="items-center text-center cursor-pointer flex-1 border-[#2A2722] border rounded-sm">
+                          <FieldContent className="items-center justify-between">
+                            <FieldTitle className="uppercase text-[12px] tracking-[1px]">
+                              Regretfully Decline
+                            </FieldTitle>
+                          </FieldContent>
+                          <RadioGroupItem
+                            value="decline"
+                            id="rsvp-decline"
+                            hidden
+                          />
+                        </Field>
+                      </FieldLabel>
+                    </RadioGroup>
+                  )}
+                />
+              </Field>
+
+              <Field>
+                <FieldLabel
+                  htmlFor="name"
+                  className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
+                >
+                  Pax ( incl. yourself )
+                </FieldLabel>
+
+                <Controller
+                  name="pax"
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <div className="flex justify-evenly">
+                      <Button
+                        type="button"
+                        className="size-10 rounded-full text-lg bg-[#FFFDF3] text-[#2A2722] border border-[#2A272220]"
+                        onClick={() => {
+                          if (Number(field.value) < 1) return;
+                          field.onChange(Number(field.value) - 1);
+                        }}
+                        disabled={Number(field.value) === 0}
+                      >
+                        -
+                      </Button>
+
+                      <p className="font-serif text-3xl">{field.value}</p>
+
+                      <Button
+                        type="button"
+                        className="size-10 rounded-full text-lg bg-[#FFFDF3] text-[#2A2722] border border-[#2A272220]"
+                        onClick={() => {
+                          if (Number(field.value) > 2) return;
+                          field.onChange(Number(field.value) + 1);
+                        }}
+                        disabled={Number(field.value) === 3}
+                        aria-invalid={error?.type === "too_small"}
+                      >
+                        +
+                      </Button>
+                    </div>
+                  )}
+                />
+              </Field>
+
+              <Field>
+                <FieldLabel
+                  htmlFor="name"
+                  className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
+                >
+                  A note for the couple (optional)
+                </FieldLabel>
+
+                <Controller
+                  name="notes"
+                  control={control}
+                  render={({ field }) => (
+                    <Textarea
+                      {...field}
+                      value={field.value || ""}
+                      autoComplete="off"
+                      placeholder="Type your note here."
+                      className="bg-[#FFFDF380] rounded-sm border border-[#2A272220] placeholder:text-sm"
+                    />
+                  )}
+                />
+              </Field>
+            </FieldGroup>
+
+            <Button
+              className="w-full py-6 uppercase tracking-[2px] text-[13px] mt-5 bg-[#5C1F1F]"
+              type="submit"
+              disabled={isSubmitting}
             >
-              Your name
-            </FieldLabel>
-
-            <Input
-              id="name"
-              autoComplete="off"
-              placeholder="Athirah"
-              className="bg-[#FFFDF380] rounded-sm py-5 border border-[#2A272220] placeholder:text-sm"
-            />
-          </Field>
-
-          <Field>
-            <FieldLabel
-              htmlFor="name"
-              className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
-            >
-              Will you attend ?
-            </FieldLabel>
-
-            <RadioGroup
-              defaultValue=""
-              className="flex gap-3 justify-center max-w-sm mx-auto"
-            >
-              <FieldLabel
-                htmlFor="rsvp-accept"
-                className="flex-1 justify-center has-data-[state=checked]:bg-[#2A2722] has-data-[state=checked]:text-[#FFFDF3]"
-              >
-                <Field className="items-center text-center cursor-pointer flex-1 border-[#2A2722] border rounded-sm">
-                  <FieldContent className="items-center justify-center">
-                    <FieldTitle className="uppercase text-[12px] tracking-[1px]">
-                      Joyfully Accept
-                    </FieldTitle>
-                  </FieldContent>
-                  <RadioGroupItem value="accept" id="rsvp-accept" hidden />
-                </Field>
-              </FieldLabel>
-
-              <FieldLabel
-                htmlFor="rsvp-decline"
-                className="flex-1 justify-between has-data-[state=checked]:bg-[#2A2722] has-data-[state=checked]:text-[#FFFDF3]"
-              >
-                <Field className="items-center text-center cursor-pointer flex-1 border-[#2A2722] border rounded-sm">
-                  <FieldContent className="items-center justify-between">
-                    <FieldTitle className="uppercase text-[12px] tracking-[1px]">
-                      Regretfully Decline
-                    </FieldTitle>
-                  </FieldContent>
-                  <RadioGroupItem value="decline" id="rsvp-decline" hidden />
-                </Field>
-              </FieldLabel>
-            </RadioGroup>
-          </Field>
-
-          <Field>
-            <FieldLabel
-              htmlFor="name"
-              className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
-            >
-              Pax ( incl. yourself )
-            </FieldLabel>
-
-            <div className="flex justify-evenly">
-              <Button className="size-10 rounded-full text-lg bg-[#FFFDF3] text-[#2A2722] border border-[#2A272220]">
-                -
-              </Button>
-
-              <p className="font-serif text-3xl">29</p>
-
-              <Button className="size-10 rounded-full text-lg bg-[#FFFDF3] text-[#2A2722] border border-[#2A272220]">
-                +
-              </Button>
-            </div>
-          </Field>
-
-          <Field>
-            <FieldLabel
-              htmlFor="name"
-              className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
-            >
-              A note for the couple
-            </FieldLabel>
-
-            <Textarea
-              id="name"
-              autoComplete="off"
-              placeholder="Type your note here."
-              className="bg-[#FFFDF380] rounded-sm border border-[#2A272220] placeholder:text-sm"
-            />
-          </Field>
-        </FieldGroup>
-
-        <Button className="w-full py-6 uppercase tracking-[2px] text-[13px] mt-5 bg-[#5C1F1F]">
-          Send response
-        </Button>
+              Send response
+            </Button>
+          </form>
+        </FormProvider>
       </div>
     </section>
   );
