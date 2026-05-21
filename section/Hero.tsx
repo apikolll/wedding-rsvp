@@ -3,7 +3,7 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <section className="relative">
+    <section id="hero" className="relative">
       <Image
         src={"/flowers/flower_1.svg"}
         alt="flower_1"
@@ -24,10 +24,14 @@ const Hero = () => {
         Together with their families
       </h1>
 
-      <div className="flex flex-col items-center px-12 mt-15 gap-12">
-        <h1 className="font-samantha text-5xl self-start ml-5">Afiq</h1>
+      <div className="flex flex-col items-center px-10 mt-15 gap-12">
+        <h1 className="font-samantha text-5xl self-start sm:self-center ml-5 sm:mr-60">
+          Afiq
+        </h1>
         <p className="font-samantha text-4xl">&</p>
-        <h1 className="font-samantha text-5xl self-end">Athirah</h1>
+        <h1 className="font-samantha text-5xl self-end sm:self-center sm:ml-60">
+          Athirah
+        </h1>
       </div>
     </section>
   );

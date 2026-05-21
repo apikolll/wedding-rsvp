@@ -1,13 +1,13 @@
 "use client";
 import Divider from "@/components/divider";
 import { useCountdown } from "@/hooks/use-countdown";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 type CountDownType = "DAYS" | "HOURS" | "MINS" | "SECS";
 
 const CountDownCard = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="rounded-md border self-stretch p-3 px-10 flex items-center justify-between">
+    <div className="rounded-md border p-2 px-10 flex items-center gap justify-around self-stretch sm:w-90 sm:mx-auto">
       {children}
     </div>
   );
@@ -32,7 +32,10 @@ const CountDown = () => {
   const { days, hours, minutes, seconds } = useCountdown("2026-06-28");
 
   return (
-    <div className="flex items-center flex-col mt-10 gap-3 px-10 border-[#2A272220]">
+    <section
+      id="countdown"
+      className="flex items-center flex-col mt-10 gap-3 px-10 border-[#2A272220]"
+    >
       <h4 className="uppercase tracking-[3px] text-[#6B6258] text-[10px] font-medium font-sans">
         counting down
       </h4>
@@ -46,7 +49,7 @@ const CountDown = () => {
         <Divider orientation="vertical" width={30} />
         <CoundownItems number={seconds} type="SECS" />
       </CountDownCard>
-    </div>
+    </section>
   );
 };
 
