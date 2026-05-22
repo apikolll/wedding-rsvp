@@ -66,7 +66,7 @@ const InvitationDetails = () => {
           <DetailContainer title="waktu">
             <div className="text-center">
               <p className="font-serif font-medium text-xl">
-                11.00 pagi – 4:00 petang
+                11.00 pagi – 4.00 petang
               </p>
             </div>
           </DetailContainer>

@@ -88,11 +88,11 @@ const Rsvp = () => {
     <section id="rsvp" className="bg-card mt-10 pb-20 overflow-hidden">
       <div className="text-center pt-15 flex flex-col gap-4 relative">
         <p className="uppercase tracking-[3px] text-[10px] text-[#6B6258]">
-          kindly respond
+          Sila sahkan kehadiran
         </p>
         <h1 className="font-allura font-medium text-6xl">R.S.V.P</h1>
         <p className="font-serif text-[14px] text-[#6B6258] italic">
-          by 14 June 2026
+          sebelum 14 Jun 2026
         </p>
         <Flower className={"size-30 absolute -right-3 top-13"} />
       </div>
@@ -255,7 +255,7 @@ const Rsvp = () => {
                       {...field}
                       value={field.value || ""}
                       autoComplete="off"
-                      placeholder="Type your note here."
+                      placeholder="Tulis ucapan anda di sini."
                       className="bg-[#FFFDF380] rounded-sm border border-[#2A272220] placeholder:text-sm text-md font-serif"
                     />
                   )}
