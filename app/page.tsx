@@ -12,7 +12,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="mt-10 overflow-x-hidden max-w-md mx-auto">
+    <main className="mt-10 overflow-x-hidden max-w-md mx-auto overscroll-x-contain">
       <Image
         src={"/logo.png"}
         alt="logo"
@@ -32,6 +32,21 @@ export default function Home() {
       <Gallery />
       <Dua />
       <NavBar />
+
+      <iframe
+        width="560"
+        height="315"
+        src="https://www.youtube.com/embed/S3DKTknto38?autoplay=1&controls=0"
+        title="YouTube video player"
+        allow="autoplay; encrypted-media;"
+        style={{
+          position: "absolute",
+          width: 1,
+          height: 1,
+          opacity: 0,
+          pointerEvents: "none",
+        }}
+      />
     </main>
   );
 }

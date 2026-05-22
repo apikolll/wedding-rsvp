@@ -37,7 +37,7 @@ const NavBar = () => {
         visible: { y: 0 },
         hidden: { y: "100%" },
       }}
-      animate={hidden ? { y: 100 } : "visible"}
+      animate={hidden ? { y: 200 } : "visible"}
       transition={{ duration: 0.25, ease: "easeInOut" }}
       className="fixed bottom-5 left-0 right-0 w-full"
     >
