@@ -9,6 +9,7 @@ import {
 } from "@tabler/icons-react";
 import { useMotionValueEvent, useScroll, motion } from "motion/react";
 import { useState } from "react";
+import { buildIcsContent, googleCalendarUrl } from "@/lib/calendar";
 
 const NavBar = () => {
   const { play, playing, pause } = useAudioPlayer();
@@ -34,6 +35,45 @@ const NavBar = () => {
     }
   });
 
+  const handleClick = () => {
+    const ua = navigator.userAgent;
+    const isApple = /iPhone|iPad|iPod|Macintosh/.test(ua);
+
+    if (isApple) {
+      // .ics opens directly in Apple Calendar
+      const blob = new Blob(
+        [
+          buildIcsContent({
+            title: "Wedding of Afiq & Athirah",
+            description: "Join us for the official launch",
+            location: "Bizmilla Grand Ballroom Eco Sanctuary",
+            start: new Date("2026-06-28T11:00:00+08:00"),
+            end: new Date("2026-06-28T16:00:00+08:00"),
+          }),
+        ],
+        {
+          type: "text/calendar;charset=utf-8",
+        },
+      );
+      const url = URL.createObjectURL(blob);
+      window.location.href = url;
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } else {
+      // Android / desktop: Google Calendar is usually fastest
+      window.open(
+        googleCalendarUrl({
+          title: "Wedding of Afiq & Athirah",
+          description: "Join us for the official launch",
+          location: "Bizmilla Grand Ballroom Eco Sanctuary",
+          start: new Date("2026-06-28T11:00:00+08:00"),
+          end: new Date("2026-06-28T16:00:00+08:00"),
+        }),
+        "_blank",
+        "noopener,noreferrer",
+      );
+    }
+  };
+
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
@@ -53,6 +93,7 @@ const NavBar = () => {
           <Button
             variant={"outline"}
             className="rounded-full flex-1 uppercase text-xs tracking-wider"
+            onClick={handleClick}
           >
             <IconCalendarEvent stroke={2} />
             Save Date
@@ -60,6 +101,7 @@ const NavBar = () => {
           <Button
             variant={"outline"}
             className="rounded-full flex-1 uppercase text-xs tracking-wider"
+            onClick={() => scrollToSection("location")}
           >
             <IconMapPin stroke={2} />
             Maps
