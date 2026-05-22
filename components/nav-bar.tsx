@@ -1,10 +1,17 @@
 "use client";
+import { useAudioPlayer } from "@/context/AudioPlayerContext";
 import { Button } from "./ui/button";
-import { IconCalendarEvent, IconMapPin } from "@tabler/icons-react";
+import {
+  IconCalendarEvent,
+  IconMapPin,
+  IconPlayerPause,
+  IconPlayerPlay,
+} from "@tabler/icons-react";
 import { useMotionValueEvent, useScroll, motion } from "motion/react";
 import { useState } from "react";
 
 const NavBar = () => {
+  const { play, playing, pause } = useAudioPlayer();
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
 
@@ -63,6 +70,24 @@ const NavBar = () => {
             onClick={() => scrollToSection("rsvp")}
           >
             R.S.V.P
+          </Button>
+
+          <Button
+            onClick={() => {
+              if (playing) {
+                pause();
+              } else {
+                play({ src: "/songs/gurindam_jiwa.mp3" });
+              }
+            }}
+            variant={"outline"}
+            className="rounded-full"
+          >
+            {!playing ? (
+              <IconPlayerPlay stroke={2} />
+            ) : (
+              <IconPlayerPause stroke={2} />
+            )}
           </Button>
         </div>
       </div>

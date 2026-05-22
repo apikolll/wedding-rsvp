@@ -82,6 +82,7 @@ const Gallery = () => {
           alt="Gallery 2"
           width={400}
           height={400}
+          priority
           className="h-48 w-full rounded-md object-cover shadow-md shadow-black/30"
         />
         <Image
@@ -89,6 +90,7 @@ const Gallery = () => {
           alt="Gallery 3"
           width={400}
           height={400}
+          priority
           className="h-48 w-full rounded-md object-cover shadow-md shadow-black/30"
         />
 
@@ -97,6 +99,7 @@ const Gallery = () => {
           alt="Gallery 4"
           width={400}
           height={600}
+          priority
           className="h-80 w-full rounded-md object-cover shadow-md shadow-black/30"
         />
         <div className="flex flex-col gap-3 h-80">
@@ -105,6 +108,7 @@ const Gallery = () => {
             alt="Gallery 5"
             width={400}
             height={300}
+            priority
             className="h-[calc(50%-0.375rem)] w-full rounded-md object-cover shadow-md shadow-black/30"
           />
           <Image
@@ -112,6 +116,7 @@ const Gallery = () => {
             alt="Gallery 6"
             width={400}
             height={300}
+            priority
             className="h-[calc(50%-0.375rem)] w-full rounded-md object-cover shadow-md shadow-black/30"
           />
         </div>
