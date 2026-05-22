@@ -20,18 +20,25 @@ import { toast } from "sonner";
 
 import { z } from "zod";
 
-const schema = z.object({
-  name: z.string("Name is required."),
-  status: z.enum(["accept", "decline"]),
-  pax: z.number().min(1, "Minimum pax is 1.").max(3, "Maximum pax is 3."),
-  notes: z.string().nullable(),
-});
+const schema = z.discriminatedUnion("status", [
+  z.object({
+    name: z.string().min(1, "Name is required."),
+    status: z.literal("accept"),
+    pax: z.number().min(1, "Minimum pax is 1.").max(3, "Maximum pax is 3."),
+    notes: z.string().nullable(),
+  }),
+  z.object({
+    name: z.string().min(1, "Name is required."),
+    status: z.literal("decline"),
+    notes: z.string().nullable(),
+  }),
+]);
 
 const Rsvp = () => {
   const methods = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: undefined,
+      name: "",
       status: "accept",
       pax: 0,
       notes: "",
@@ -43,7 +50,11 @@ const Rsvp = () => {
     control,
     formState: { isSubmitting },
     handleSubmit,
+
+    watch,
   } = methods;
+
+  const status = watch("status");
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -87,7 +98,7 @@ const Rsvp = () => {
                       {...field}
                       autoComplete="off"
                       placeholder="Athirah"
-                      className="bg-[#FFFDF380] rounded-sm py-5 border border-[#2A272220] placeholder:text-sm text-sm"
+                      className="bg-[#FFFDF380] rounded-sm py-5 border border-[#2A272220] placeholder:text-sm text-md font-serif"
                       aria-invalid={!!error}
                     />
                     {error && (
@@ -158,49 +169,51 @@ const Rsvp = () => {
                 />
               </Field>
 
-              <Field>
-                <FieldLabel
-                  htmlFor="name"
-                  className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
-                >
-                  Pax ( incl. yourself )
-                </FieldLabel>
+              {status === "accept" && (
+                <Field>
+                  <FieldLabel
+                    htmlFor="name"
+                    className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
+                  >
+                    Pax ( incl. yourself )
+                  </FieldLabel>
 
-                <Controller
-                  name="pax"
-                  control={control}
-                  render={({ field, fieldState: { error } }) => (
-                    <div className="flex justify-evenly">
-                      <Button
-                        type="button"
-                        className="size-10 rounded-full text-lg bg-[#FFFDF3] text-[#2A2722] border border-[#2A272220]"
-                        onClick={() => {
-                          if (Number(field.value) < 1) return;
-                          field.onChange(Number(field.value) - 1);
-                        }}
-                        disabled={Number(field.value) === 0}
-                      >
-                        -
-                      </Button>
+                  <Controller
+                    name="pax"
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <div className="flex justify-evenly">
+                        <Button
+                          type="button"
+                          className="size-10 rounded-full text-lg bg-[#FFFDF3] text-[#2A2722] border border-[#2A272220]"
+                          onClick={() => {
+                            if (Number(field.value) < 1) return;
+                            field.onChange(Number(field.value) - 1);
+                          }}
+                          disabled={Number(field.value) === 0}
+                        >
+                          -
+                        </Button>
 
-                      <p className="font-serif text-3xl">{field.value}</p>
+                        <p className="font-serif text-3xl">{field.value}</p>
 
-                      <Button
-                        type="button"
-                        className="size-10 rounded-full text-lg bg-[#FFFDF3] text-[#2A2722] border border-[#2A272220]"
-                        onClick={() => {
-                          if (Number(field.value) > 2) return;
-                          field.onChange(Number(field.value) + 1);
-                        }}
-                        disabled={Number(field.value) === 3}
-                        aria-invalid={error?.type === "too_small"}
-                      >
-                        +
-                      </Button>
-                    </div>
-                  )}
-                />
-              </Field>
+                        <Button
+                          type="button"
+                          className="size-10 rounded-full text-lg bg-[#FFFDF3] text-[#2A2722] border border-[#2A272220]"
+                          onClick={() => {
+                            if (Number(field.value) > 2) return;
+                            field.onChange(Number(field.value) + 1);
+                          }}
+                          disabled={Number(field.value) === 3}
+                          aria-invalid={error?.type === "too_small"}
+                        >
+                          +
+                        </Button>
+                      </div>
+                    )}
+                  />
+                </Field>
+              )}
 
               <Field>
                 <FieldLabel
@@ -219,7 +232,7 @@ const Rsvp = () => {
                       value={field.value || ""}
                       autoComplete="off"
                       placeholder="Type your note here."
-                      className="bg-[#FFFDF380] rounded-sm border border-[#2A272220] placeholder:text-sm"
+                      className="bg-[#FFFDF380] rounded-sm border border-[#2A272220] placeholder:text-sm text-md font-serif"
                     />
                   )}
                 />

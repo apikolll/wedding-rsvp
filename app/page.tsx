@@ -1,5 +1,8 @@
+import NavBar from "@/components/nav-bar";
 import CountDown from "@/section/CountDown";
 import DateDetails from "@/section/DateDetails";
+import Dua from "@/section/Dua";
+import Gallery from "@/section/Gallery";
 import Hero from "@/section/Hero";
 import InvitationDetails from "@/section/InvitationDetails";
 import Location from "@/section/Location";
@@ -9,7 +12,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="mt-10">
+    <main className="mt-10 overflow-x-hidden max-w-md mx-auto">
       <Image
         src={"/logo.png"}
         alt="logo"
@@ -26,6 +29,9 @@ export default function Home() {
       <InvitationDetails />
       <Location />
       <Rsvp />
+      <Gallery />
+      <Dua />
+      <NavBar />
     </main>
   );
 }
