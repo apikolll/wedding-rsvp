@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 import Flower from "@/public/flowers/flower_5.svg";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -35,6 +36,8 @@ const schema = z.discriminatedUnion("status", [
 ]);
 
 const Rsvp = () => {
+  const queryClient = useQueryClient();
+
   const methods = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -67,9 +70,13 @@ const Rsvp = () => {
         body: JSON.stringify(data),
       });
 
+      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+
       const response = await res.json();
 
       reset();
+      queryClient.invalidateQueries({ queryKey: ["rsvp"] });
+
       if (response.status === "decline") {
         toast.success(
           `Thank you for letting us know, [name]. You'll be missed — but we appreciate you taking the time to respond. 🤍`,

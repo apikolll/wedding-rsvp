@@ -22,43 +22,43 @@ import { useMemo, useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
 
 const AdminPage = () => {
-  const { list, status } = useGetRSVP();
+  const { data, isPending, isError, error } = useGetRSVP();
   const [search, setSearch] = useState("");
 
-  const filteredList = useMemo(() => {
-    if (!search) return list;
+  const filtereddata = useMemo(() => {
+    if (!search) return data;
 
-    return list?.filter((a) =>
+    return data?.filter((a) =>
       a.name.toLowerCase().includes(search.toLowerCase()),
     );
-  }, [list, search]);
+  }, [data, search]);
 
   const hadir = useMemo(() => {
-    if (status === "loading") return;
+    if (isPending) return;
 
-    return list?.filter((item) => item.status === "accept");
-  }, [list, status]);
+    return data?.filter((item) => item.status === "accept");
+  }, [data, isPending]);
 
   const tidakHadir = useMemo(() => {
-    if (status === "loading") return;
+    if (isPending) return;
 
-    return list?.filter((item) => item.status === "decline");
-  }, [list, status]);
+    return data?.filter((item) => item.status === "decline");
+  }, [data, isPending]);
 
-  if (status === "loading")
+  if (isPending)
     return <Spinner className="absolute top-1/2 left-1/2 size-6" />;
 
-  if (status === "error")
+  if (isError)
     return (
       <h1 className="absolute top-1/2 left-1/2 -translate-1/2 text-red-700">
-        Failed to fetch data
+        {error?.message || "Failed to fetch data"}
       </h1>
     );
 
   return (
-    <main className="px-5">
+    <main className="px-5 pb-10">
       <div className="mt-10">
-        <h1 className="font-allura text-5xl text-center italic">RSVP List</h1>
+        <h1 className="font-allura text-5xl text-center italic">RSVP data</h1>
       </div>
 
       <div className="flex justify-between gap-3 my-10 flex-col md:flex-row">
@@ -69,7 +69,7 @@ const AdminPage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <h1 className="text-4xl font-bold font-serif">{list?.length}</h1>
+            <h1 className="text-4xl font-bold font-serif">{data?.length}</h1>
           </CardContent>
         </Card>
         <Card className="flex-1">
@@ -108,7 +108,7 @@ const AdminPage = () => {
           <IconSearch stroke={2} />
         </InputGroupAddon>
         <InputGroupAddon align="inline-end">
-          {filteredList?.length} results
+          {filtereddata?.length} results
         </InputGroupAddon>
       </InputGroup>
 
@@ -122,7 +122,7 @@ const AdminPage = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredList?.map((item) => (
+          {filtereddata?.map((item) => (
             <TableRow key={item.id} className="text-center">
               <TableCell className="font-medium">{item.name}</TableCell>
               <TableCell>

@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 import localFont from "next/font/local";
 import { Toaster } from "sonner";
+import Providers from "./provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -71,7 +72,9 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className="min-h-full flex flex-col">
-        <main>{children}</main>
+        <main>
+          <Providers>{children}</Providers>
+        </main>
         <Toaster />
       </body>
     </html>
