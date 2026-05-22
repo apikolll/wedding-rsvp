@@ -20,8 +20,10 @@ import { Badge } from "@/components/ui/badge";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
+import useRSVPStream from "@/hooks/use-rsvp-stream";
 
 const AdminPage = () => {
+  useRSVPStream();
   const { data, isPending, isError, error } = useGetRSVP();
   const [search, setSearch] = useState("");
 
