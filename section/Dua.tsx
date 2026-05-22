@@ -10,12 +10,17 @@ const Dua = () => {
       <Flower2 className="size-35 absolute -right-6 top-27" />
       <div>
         <p className="text-pretty text-center font-serif italic text-[#6B6258] text-[15px] px-6 pt-20">
-          “And among His signs is this, that He created for you mates from among
+          {/* “And among His signs is this, that He created for you mates from among
           yourselves, that you may dwell in tranquility with them, and He has
-          put love and mercy between your hearts.”
+          put love and mercy between your hearts.” */}
+          &quot;Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan
+          untuk kamu pasangan hidup dari jenis kamu sendiri supaya kamu hidup
+          tenang bersamanya. Dia menjadikan di antara kamu kasih sayang dan
+          belas kasihan. Sesungguhnya pada yang demikian itu terdapat
+          tanda-tanda bagi kaum yang berfikir.&quot;
         </p>
         <p className="text-[10px] uppercase text-center mt-3 text-[#A99F92] tracking-[2px]">
-          – AR - RUM 30 : 12
+          — Surah Ar-Rum (30:21)
         </p>
       </div>
 

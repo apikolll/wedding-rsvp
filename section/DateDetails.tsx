@@ -14,15 +14,16 @@ const DateDetails = () => {
       />
 
       <h1 className="font-serif italic text-center text-[16px] text-muted-foreground mt-10">
-        Invites you to celebrate their wedding
+        {/* Invites you to celebrate their wedding */}
+        Menjemput ke majlis perkahwinan kami
       </h1>
 
-      <p className="text-center font-samantha mt-7">On</p>
+      <p className="text-center font-samantha mt-7">Pada</p>
 
       <div className="flex justify-center gap-10 mt-5">
         <div className="inline-flex flex-col items-center gap-2">
           <Divider width={80} />
-          <p className="font-serif italic text-[#6B6258]">June</p>
+          <p className="font-serif italic text-[#6B6258]">Jun</p>
           <Divider width={80} />
         </div>
 
@@ -35,12 +36,12 @@ const DateDetails = () => {
 
         <div className="inline-flex flex-col items-center gap-2">
           <Divider width={80} />
-          <p className="font-serif italic text-[#6B6258]">11:00 AM</p>
+          <p className="font-serif italic text-[#6B6258]">11.00 Pagi</p>
           <Divider width={80} />
         </div>
       </div>
 
-      <p className="text-center font-samantha mt-7">At</p>
+      <p className="text-center font-samantha mt-7">Di</p>
 
       <div className="flex flex-col items-center justify-center mt-7">
         <p className="font-serif text-xl">Bizmilla Grand Ballroom</p>

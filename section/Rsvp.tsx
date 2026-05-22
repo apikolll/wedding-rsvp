@@ -111,7 +111,7 @@ const Rsvp = () => {
                       htmlFor="name"
                       className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
                     >
-                      Your name
+                      Nama
                     </FieldLabel>
                     <Input
                       {...field}
@@ -134,7 +134,8 @@ const Rsvp = () => {
                   htmlFor="name"
                   className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
                 >
-                  Will you attend ?
+                  {/* Will you attend ? */}
+                  Sahkan kehadiran anda
                 </FieldLabel>
 
                 <Controller
@@ -155,7 +156,8 @@ const Rsvp = () => {
                         <Field className="items-center text-center cursor-pointer flex-1 border-[#2A2722] border rounded-sm">
                           <FieldContent className="items-center justify-center">
                             <FieldTitle className="uppercase text-[12px] tracking-[1px]">
-                              Joyfully Accept
+                              {/* Joyfully Accept */}
+                              Hadir
                             </FieldTitle>
                           </FieldContent>
                           <RadioGroupItem
@@ -173,7 +175,8 @@ const Rsvp = () => {
                         <Field className="items-center text-center cursor-pointer flex-1 border-[#2A2722] border rounded-sm">
                           <FieldContent className="items-center justify-between">
                             <FieldTitle className="uppercase text-[12px] tracking-[1px]">
-                              Regretfully Decline
+                              {/* Regretfully Decline */}
+                              Tidak Hadir
                             </FieldTitle>
                           </FieldContent>
                           <RadioGroupItem
@@ -194,7 +197,8 @@ const Rsvp = () => {
                     htmlFor="name"
                     className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
                   >
-                    Pax ( incl. yourself )
+                    {/* Pax ( incl. yourself ) */}
+                    Bilangan kehadiran (termasuk anda)
                   </FieldLabel>
 
                   <Controller
@@ -239,7 +243,8 @@ const Rsvp = () => {
                   htmlFor="name"
                   className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
                 >
-                  A note for the couple (optional)
+                  {/* A note for the couple (optional) */}
+                  Ucapan untuk pasangan
                 </FieldLabel>
 
                 <Controller
@@ -263,7 +268,8 @@ const Rsvp = () => {
               type="submit"
               disabled={isSubmitting}
             >
-              Send response
+              {/* Send response */}
+              Hantar
             </Button>
           </form>
         </FormProvider>

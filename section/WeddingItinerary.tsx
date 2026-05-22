@@ -9,7 +9,7 @@ const WeddingItinerary = () => {
       aria-label="wedding-itinerary"
       className="mt-10"
     >
-      <div className="flex flex-col items-center p-5 relative sm:bg-linear-to-r sm:from-[#A52A2A] sm:via-[#80000070] sm:to-[#9CAF88] sm:w-md sm:rounded-xl sm:mx-auto sm:overflow-hidden">
+      <div className="flex flex-col items-center p-5 relative pb-20 sm:bg-linear-to-r sm:from-[#A52A2A] sm:via-[#80000070] sm:to-[#9CAF88] sm:w-md sm:rounded-xl sm:mx-auto sm:overflow-hidden">
         <Image
           src={"/blob/Blob.svg"}
           alt="blob"
@@ -18,8 +18,8 @@ const WeddingItinerary = () => {
           className="absolute right-0 w-101 -z-10 sm:hidden"
         />
 
-        <div className="mt-15">
-          <h1 className="font-samantha text-white text-3xl">The Day</h1>
+        <div className="mt-18">
+          <h1 className="font-samantha text-white text-3xl">Aturcara Majlis</h1>
         </div>
 
         <StarDivider theme="light" />
@@ -33,36 +33,24 @@ const WeddingItinerary = () => {
             <div className="relative">
               <div className="absolute -left-6.5 top-1.5 w-3 h-3 rounded-full border-2 bg-white"></div>
               <div className="font-serif text-[#E6E6E6]">
-                <p>11:00 am</p>
-                <h4 className="text-xl font-medium">Guest Arrival</h4>
-                <p>Welcome drinks & seating</p>
+                <p>11.00 pagi</p>
+                <h4 className="text-xl font-medium">Ketibaan Tetamu</h4>
               </div>
             </div>
 
             <div className="relative">
               <div className="absolute -left-6.5 top-1.5 w-3 h-3 rounded-full border-2 bg-white "></div>
               <div className="font-serif text-[#E6E6E6]">
-                <p>11:30 am</p>
-                <h4 className="text-xl font-medium">Guest Arrival</h4>
-                <p>Welcome drinks & seating</p>
+                <p>12.30 tengahari</p>
+                <h4 className="text-xl font-medium">Ketibaan Pengantin</h4>
               </div>
             </div>
 
             <div className="relative">
               <div className="absolute -left-6.5 top-1.5 w-3 h-3 rounded-full border-2 bg-white "></div>
               <div className="font-serif text-[#E6E6E6]">
-                <p>11:30 am</p>
-                <h4 className="text-xl font-medium">Guest Arrival</h4>
-                <p>Welcome drinks & seating</p>
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="absolute -left-6.5 top-1.5 w-3 h-3 rounded-full border-2 bg-white "></div>
-              <div className="font-serif text-[#E6E6E6]">
-                <p>11:30 am</p>
-                <h4 className="text-xl font-medium">Guest Arrival</h4>
-                <p>Welcome drinks & seating</p>
+                <p>4.00 petang</p>
+                <h4 className="text-xl font-medium">Majlis selesai</h4>
               </div>
             </div>
           </div>

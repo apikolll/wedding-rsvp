@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 
 const InvitationDetails = () => {
   return (
-    <section id="invitation-details" className="mt-20">
+    <section id="invitation-details" className="mt-45">
       <div className="flex flex-col items-center">
         <h1 className="font-serif font-medium text-center text-2xl text-[#626262]">
           Walimatul Urus
@@ -66,7 +66,7 @@ const InvitationDetails = () => {
           <DetailContainer title="waktu">
             <div className="text-center">
               <p className="font-serif font-medium text-xl">
-                11:00 pagi – 4:00 petang
+                11.00 pagi – 4:00 petang
               </p>
             </div>
           </DetailContainer>

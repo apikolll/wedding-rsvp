@@ -5,12 +5,12 @@ import Image from "next/image";
 const Gallery = () => {
   return (
     <section id="gallery" className="mt-10">
-      <div className="text-center flex flex-col gap-3 relative">
-        <p className="uppercase tracking-[3px] text-[10px] text-[#6B6258]">
-          Moments
-        </p>
-        <h1 className="font-allura text-5xl">Our Story</h1>
-        <Flower1 className="size-30 absolute -left-7 top-10" />
+      <div className="text-center flex flex-col gap-3 relative pt-5">
+        {/* <p className="uppercase tracking-[3px] text-[10px] text-[#6B6258]">
+          Detik Manis
+        </p> */}
+        <h1 className="font-allura text-5xl">Detik Manis</h1>
+        <Flower1 className="size-30 absolute -left-7 top-8" />
         <Flower2 className="size-30 absolute -right-7" />
       </div>
 
@@ -67,7 +67,7 @@ const Gallery = () => {
         </div>
       </div> */}
 
-      <div className="grid grid-cols-2 grid-rows-[auto_auto_auto] gap-3 px-5 mt-20">
+      <div className="grid grid-cols-2 grid-rows-[auto_auto_auto] gap-3 px-5 mt-15">
         <Image
           src="/images/E-128.jpg"
           alt="Hero"

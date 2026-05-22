@@ -20,8 +20,10 @@ const Hero = () => {
         className="w-50 absolute right-0 top-8"
       />
 
-      <h1 className="font-serif uppercase text-center text-[16px] tracking-wider text-muted-foreground">
-        Together with their families
+      <h1 className="font-serif uppercase text-center text-[20px] tracking-wider text-muted-foreground">
+        {/* Together with their families */}
+        {/* Bismillahirrahmanirrahim */}
+        بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
       </h1>
 
       <div className="flex flex-col items-center px-10 mt-15 gap-12">

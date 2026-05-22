@@ -1,6 +1,12 @@
+"use client";
 import { Button } from "@/components/ui/button";
+import { IconBrandGoogleMaps, IconBrandWaze } from "@tabler/icons-react";
 
 const Location = () => {
+  const open = (url: string) => {
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <section id="location" className="mt-10">
       <div className="mx-5 flex flex-col gap-2">
@@ -16,14 +22,24 @@ const Location = () => {
           />
         </div>
         <div className="flex justify-between gap-3">
-          <Button className="uppercase rounded-sm text-xs px-8 py-5 w-max flex-1">
-            open in maps
+          <Button
+            className="uppercase rounded-sm text-xs px-8 py-5 w-max flex-1"
+            onClick={() =>
+              open(
+                "https://ul.waze.com/ul?place=ChIJt-BPU3qxzTERGUyNOO_9k1I&ll=2.94469830%2C101.54306790&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location",
+              )
+            }
+          >
+            <IconBrandWaze stroke={2} />
+            Waze
           </Button>
           <Button
-            className="uppercase rounded-sm text-xs px-8 py-5 w-max flex-1 border-[#2A2722] text-[#2A2722]"
-            variant={"outline"}
+            // className="uppercase rounded-sm text-xs px-8 py-5 w-max flex-1 border-[#2A2722] text-[#2A2722]"
+            className="uppercase rounded-sm text-xs px-8 py-5 w-max flex-1"
+            onClick={() => open("https://maps.app.goo.gl/XD6R4wcSyf6WdHiW7")}
           >
-            copy address
+            <IconBrandGoogleMaps stroke={2} />
+            Google Maps
           </Button>
         </div>
       </div>

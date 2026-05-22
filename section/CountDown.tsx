@@ -3,7 +3,7 @@ import Divider from "@/components/divider";
 import { useCountdown } from "@/hooks/use-countdown";
 import React from "react";
 
-type CountDownType = "DAYS" | "HOURS" | "MINS" | "SECS";
+type CountDownType = "HARI" | "JAM" | "MINIT" | "SAAT";
 
 const CountDownCard = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -37,17 +37,18 @@ const CountDown = () => {
       className="flex items-center flex-col mt-10 gap-3 px-10 border-[#2A272220]"
     >
       <h4 className="uppercase tracking-[3px] text-[#6B6258] text-[10px] font-medium font-sans">
-        counting down
+        {/* counting down */}
+        Menghitung hari
       </h4>
 
       <CountDownCard>
-        <CoundownItems number={days} type="DAYS" />
+        <CoundownItems number={days} type="HARI" />
         <Divider orientation="vertical" width={30} />
-        <CoundownItems number={hours} type="HOURS" />
+        <CoundownItems number={hours} type="JAM" />
         <Divider orientation="vertical" width={30} />
-        <CoundownItems number={minutes} type="MINS" />
+        <CoundownItems number={minutes} type="MINIT" />
         <Divider orientation="vertical" width={30} />
-        <CoundownItems number={seconds} type="SECS" />
+        <CoundownItems number={seconds} type="SAAT" />
       </CountDownCard>
     </section>
   );
