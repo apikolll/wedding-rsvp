@@ -1,0 +1,38 @@
+import { prisma } from "@/config/prisma";
+import { Status } from "@/generated/prisma-client";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function POST(req: NextRequest) {
+  try {
+    const data = await req.json();
+
+    // Basic validation — swap for Zod if you want stricter checks
+    if (!data.name || !data.status) {
+      return NextResponse.json(
+        { error: "name and status are required" },
+        { status: 400 },
+      );
+    }
+
+    if (data.status !== "accept" && data.status !== "decline") {
+      return NextResponse.json(
+        { error: 'status must be "accept" or "decline"' },
+        { status: 400 },
+      );
+    }
+
+    const rsvp = await prisma.user.create({
+      data: {
+        name: data.name,
+        status: data.status as Status,
+        notes: data.notes ?? null,
+        pax: data.pax ?? null,
+      },
+    });
+
+    return NextResponse.json(rsvp, { status: 201 });
+  } catch (err) {
+    console.error("RSVP create failed:", err);
+    return NextResponse.json({ error: "Failed to save RSVP" }, { status: 500 });
+  }
+}

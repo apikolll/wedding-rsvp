@@ -22,15 +22,15 @@ import { z } from "zod";
 
 const schema = z.discriminatedUnion("status", [
   z.object({
-    name: z.string().min(1, "Name is required."),
+    name: z.string().min(1, "Name is required.").max(100, "Name too long"),
     status: z.literal("accept"),
     pax: z.number().min(1, "Minimum pax is 1.").max(3, "Maximum pax is 3."),
-    notes: z.string().nullable(),
+    notes: z.string().max(300, "Notes is too long").nullable(),
   }),
   z.object({
-    name: z.string().min(1, "Name is required."),
+    name: z.string().min(1, "Name is required.").max(100, "Name too long"),
     status: z.literal("decline"),
-    notes: z.string().nullable(),
+    notes: z.string().max(300, "Notes is too long").nullable(),
   }),
 ]);
 
@@ -50,16 +50,35 @@ const Rsvp = () => {
     control,
     formState: { isSubmitting },
     handleSubmit,
-
+    reset,
     watch,
   } = methods;
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const status = watch("status");
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log(data);
-      toast.success(JSON.stringify(data));
+      const res = await fetch("/api/rsvp", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+
+      const response = await res.json();
+
+      reset();
+      if (response.status === "decline") {
+        toast.success(
+          `Thank you for letting us know, [name]. You'll be missed — but we appreciate you taking the time to respond. 🤍`,
+        );
+      } else {
+        toast.success(
+          `Thank you! Your RSVP has been received. We can't wait to celebrate with you. 💌`,
+        );
+      }
     } catch (error) {
       console.log(error);
     }
