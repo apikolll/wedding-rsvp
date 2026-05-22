@@ -2,6 +2,17 @@ import { prisma } from "@/config/prisma";
 import { Status } from "@/generated/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
+export async function GET() {
+  try {
+    const rsvp = await prisma.user.findMany({});
+
+    return NextResponse.json(rsvp, { status: 200 });
+  } catch (err) {
+    console.error("RSVP get failed:", err);
+    return NextResponse.json({ error: "Failed to get RSVP" }, { status: 500 });
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();

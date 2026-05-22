@@ -1,0 +1,154 @@
+"use client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import useGetRSVP from "@/hooks/use-get-rsvp";
+
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { IconSearch } from "@tabler/icons-react";
+import { Badge } from "@/components/ui/badge";
+import clsx from "clsx";
+import { useMemo, useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
+
+const AdminPage = () => {
+  const { list, status } = useGetRSVP();
+  const [search, setSearch] = useState("");
+
+  const filteredList = useMemo(() => {
+    if (!search) return list;
+
+    return list?.filter((a) =>
+      a.name.toLowerCase().includes(search.toLowerCase()),
+    );
+  }, [list, search]);
+
+  const hadir = useMemo(() => {
+    if (status === "loading") return;
+
+    return list?.filter((item) => item.status === "accept");
+  }, [list, status]);
+
+  const tidakHadir = useMemo(() => {
+    if (status === "loading") return;
+
+    return list?.filter((item) => item.status === "decline");
+  }, [list, status]);
+
+  if (status === "loading")
+    return <Spinner className="absolute top-1/2 left-1/2 size-6" />;
+
+  if (status === "error")
+    return (
+      <h1 className="absolute top-1/2 left-1/2 -translate-1/2 text-red-700">
+        Failed to fetch data
+      </h1>
+    );
+
+  return (
+    <main className="px-5">
+      <div className="mt-10">
+        <h1 className="font-allura text-5xl text-center italic">RSVP List</h1>
+      </div>
+
+      <div className="flex justify-between gap-3 my-10 flex-col md:flex-row">
+        <Card className="flex-1">
+          <CardHeader>
+            <CardTitle className="text-gray-500 font-medium text-sm tracking-wide">
+              Jumlah orang
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <h1 className="text-4xl font-bold font-serif">{list?.length}</h1>
+          </CardContent>
+        </Card>
+        <Card className="flex-1">
+          <CardHeader>
+            <CardTitle className="text-gray-500 font-medium text-sm tracking-wide">
+              Hadir
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <h1 className="text-4xl font-bold font-serif text-green-700">
+              {hadir?.length}
+            </h1>
+          </CardContent>
+        </Card>
+        <Card className="flex-1">
+          <CardHeader>
+            <CardTitle className="text-gray-500 font-medium text-sm tracking-wide">
+              Tidak hadir
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <h1 className="text-4xl font-bold font-serif text-red-700">
+              {tidakHadir?.length}
+            </h1>
+          </CardContent>
+        </Card>
+      </div>
+
+      <InputGroup className="max-w-full my-5">
+        <InputGroupInput
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search..."
+        />
+        <InputGroupAddon>
+          <IconSearch stroke={2} />
+        </InputGroupAddon>
+        <InputGroupAddon align="inline-end">
+          {filteredList?.length} results
+        </InputGroupAddon>
+      </InputGroup>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-25 text-center">Nama</TableHead>
+            <TableHead className="text-center">Status Kehadiran</TableHead>
+            <TableHead className="text-center">Bilangan kehadiran</TableHead>
+            <TableHead className="text-center">Ucapan</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {filteredList?.map((item) => (
+            <TableRow key={item.id} className="text-center">
+              <TableCell className="font-medium">{item.name}</TableCell>
+              <TableCell>
+                <Badge
+                  className={clsx(
+                    "uppercase rounded-sm",
+                    item.status === "accept" &&
+                      "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300 text-[12px]",
+                    item.status === "decline" &&
+                      "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300",
+                  )}
+                  variant={"secondary"}
+                >
+                  {item.status}
+                </Badge>
+              </TableCell>
+              <TableCell>{item.pax || "N/A"}</TableCell>
+              <TableCell className="text-center text-pretty capitalize max-w-100 whitespace-break-spaces">
+                {item.notes || "N/A"}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </main>
+  );
+};
+
+export default AdminPage;
