@@ -44,8 +44,7 @@ const NavBar = () => {
       const blob = new Blob(
         [
           buildIcsContent({
-            title: "Wedding of Afiq & Athirah",
-            description: "Join us for the official launch",
+            title: "The Wedding of Afiq & Athirah",
             location: "Bizmilla Grand Ballroom Eco Sanctuary",
             start: new Date("2026-06-28T11:00:00+08:00"),
             end: new Date("2026-06-28T16:00:00+08:00"),
@@ -62,8 +61,7 @@ const NavBar = () => {
       // Android / desktop: Google Calendar is usually fastest
       window.open(
         googleCalendarUrl({
-          title: "Wedding of Afiq & Athirah",
-          description: "Join us for the official launch",
+          title: "The Wedding of Afiq & Athirah",
           location: "Bizmilla Grand Ballroom Eco Sanctuary",
           start: new Date("2026-06-28T11:00:00+08:00"),
           end: new Date("2026-06-28T16:00:00+08:00"),
@@ -88,13 +86,13 @@ const NavBar = () => {
       }}
       animate={hidden ? { y: 200 } : "visible"}
       transition={{ duration: 0.25, ease: "easeInOut" }}
-      className="fixed bottom-5 left-0 right-0 w-full"
+      className="fixed bottom-5 left-0 right-0 w-full overflow-hidden"
     >
-      <div className="bg-[#fffdf3] mx-5 shadow-md p-1.5 rounded-full">
-        <div className="flex justify-between gap-3">
+      <div className="bg-[#fffdf3] mx-5 shadow-md p-1.5 rounded-full h-15">
+        <div className="flex justify-between gap-3 h-full">
           <Button
             variant={"outline"}
-            className="rounded-full flex-1 uppercase text-xs tracking-wider"
+            className="rounded-full flex-1 uppercase text-xs tracking-wider h-full"
             onClick={handleClick}
           >
             <IconCalendarEvent stroke={2} />
@@ -102,7 +100,7 @@ const NavBar = () => {
           </Button>
           <Button
             variant={"outline"}
-            className="rounded-full flex-1 uppercase text-xs tracking-wider"
+            className="rounded-full flex-1 uppercase text-xs tracking-wider h-full"
             onClick={() => scrollToSection("location")}
           >
             <IconMapPin stroke={2} />
@@ -110,7 +108,7 @@ const NavBar = () => {
           </Button>
           <Button
             variant={"outline"}
-            className="rounded-full flex-1 uppercase text-xs bg-[#5c1f1f] text-white tracking-wider"
+            className="rounded-full flex-1 uppercase text-xs bg-[#5c1f1f] text-white tracking-wider h-full"
             onClick={() => scrollToSection("rsvp")}
           >
             R.S.V.P
@@ -127,7 +125,7 @@ const NavBar = () => {
               }
             }}
             variant={"outline"}
-            className="rounded-full"
+            className="rounded-full self-center size-10"
           >
             {!playing ? (
               <IconPlayerPlay stroke={2} />
