@@ -7,6 +7,7 @@ type RSVP = {
   name: string;
   pax: number;
   notes?: string;
+  createdAt: string;
 };
 
 const fetchRSVP = async (): Promise<RSVP[]> => {

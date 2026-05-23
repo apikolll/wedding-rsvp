@@ -21,6 +21,10 @@ import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import useRSVPStream from "@/hooks/use-rsvp-stream";
+import dayjs from "dayjs";
+import LocalizedFormat from "dayjs/plugin/localizedFormat";
+
+dayjs.extend(LocalizedFormat);
 
 const AdminPage = () => {
   useRSVPStream();
@@ -121,6 +125,7 @@ const AdminPage = () => {
             <TableHead className="text-center">Status Kehadiran</TableHead>
             <TableHead className="text-center">Bilangan kehadiran</TableHead>
             <TableHead className="text-center">Ucapan</TableHead>
+            <TableHead className="text-center">Tarikh</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -145,6 +150,7 @@ const AdminPage = () => {
               <TableCell className="text-center text-pretty capitalize max-w-100 whitespace-break-spaces">
                 {item.notes || "N/A"}
               </TableCell>
+              <TableCell>{dayjs(item.createdAt).format("LLL")}</TableCell>
             </TableRow>
           ))}
         </TableBody>
