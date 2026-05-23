@@ -86,7 +86,7 @@ const NavBar = () => {
       }}
       animate={hidden ? { y: 200 } : "visible"}
       transition={{ duration: 0.25, ease: "easeInOut" }}
-      className="fixed bottom-5 left-0 right-0 w-full"
+      className="fixed bottom-2 left-0 right-0 w-full"
     >
       <div className="bg-[#fffdf3] mx-5 shadow-md p-1.5 rounded-full h-15">
         <span
