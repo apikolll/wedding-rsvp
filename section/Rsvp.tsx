@@ -22,7 +22,6 @@ import { toast } from "sonner";
 import { IconCalendar, IconCheck, IconUsers } from "@tabler/icons-react";
 
 import { z } from "zod";
-import dayjs from "dayjs";
 
 const schema = z.discriminatedUnion("status", [
   z.object({
@@ -153,7 +152,7 @@ const Rsvp = () => {
                     <Input
                       {...field}
                       autoComplete="off"
-                      placeholder="Athirah"
+                      placeholder="Nama anda"
                       className="bg-[#FFFDF380] rounded-sm py-5 border border-[#2A272220] placeholder:text-sm text-md font-serif"
                       aria-invalid={!!error}
                     />
