@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 
 import Flower from "@/public/flowers/flower_5.svg";
@@ -18,8 +19,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { IconCalendar, IconCheck, IconUsers } from "@tabler/icons-react";
 
 import { z } from "zod";
+import dayjs from "dayjs";
 
 const schema = z.discriminatedUnion("status", [
   z.object({
@@ -34,6 +37,34 @@ const schema = z.discriminatedUnion("status", [
     notes: z.string().max(300, "Notes is too long").nullable(),
   }),
 ]);
+
+const showSuccessToast = (message: string, pax?: number) => {
+  return toast.custom(
+    (t) => (
+      <div className="flex gap-3 items-start bg-white border border-zinc-200 rounded-xl p-4 shadow-lg max-w-sm">
+        <div className="w-9 h-9 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
+          <IconCheck size={18} strokeWidth={2.5} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-xl font-medium text-zinc-900 font-serif">
+            {message}
+          </p>
+          {pax && (
+            <div className="flex gap-4 mt-2.5 pt-2.5 border-t border-zinc-100 text-xs text-zinc-500 font-serif">
+              <span className="flex items-center gap-1">
+                <IconCalendar size={12} /> Ahad, Jun 28
+              </span>
+              <span className="flex items-center gap-1 font-serif">
+                <IconUsers size={12} /> {pax} orang
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+    ),
+    { duration: 5000 },
+  );
+};
 
 const Rsvp = () => {
   const queryClient = useQueryClient();
@@ -78,12 +109,11 @@ const Rsvp = () => {
       queryClient.invalidateQueries({ queryKey: ["rsvp"] });
 
       if (response.status === "decline") {
-        toast.success(
-          `Thank you for letting us know, [name]. You'll be missed — but we appreciate you taking the time to respond. 🤍`,
-        );
+        showSuccessToast("Terima kasih atas maklum balas anda.");
       } else {
-        toast.success(
-          `Thank you! Your RSVP has been received. We can't wait to celebrate with you. 💌`,
+        showSuccessToast(
+          "Terima kasih, kami nantikan kehadiran anda.",
+          response.pax,
         );
       }
     } catch (error) {
@@ -275,8 +305,7 @@ const Rsvp = () => {
               type="submit"
               disabled={isSubmitting}
             >
-              {/* Send response */}
-              Hantar
+              {isSubmitting ? <Spinner /> : "Hantar"}
             </Button>
           </form>
         </FormProvider>

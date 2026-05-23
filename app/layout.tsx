@@ -75,7 +75,15 @@ export default function RootLayout({
         <main>
           <Providers>{children}</Providers>
         </main>
-        <Toaster />
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            unstyled: true,
+            classNames: {
+              toast: "w-full",
+            },
+          }}
+        />
       </body>
     </html>
   );
