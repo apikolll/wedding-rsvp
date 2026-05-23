@@ -86,9 +86,16 @@ const NavBar = () => {
       }}
       animate={hidden ? { y: 200 } : "visible"}
       transition={{ duration: 0.25, ease: "easeInOut" }}
-      className="fixed bottom-5 left-0 right-0 w-full overflow-hidden"
+      className="fixed bottom-5 left-0 right-0 w-full"
     >
       <div className="bg-[#fffdf3] mx-5 shadow-md p-1.5 rounded-full h-15">
+        <span
+          className="
+      absolute inset-x-0 top-0 h-1/2 rounded-t-full
+      bg-linear-to-b from-white/40 to-transparent
+      opacity-60 pointer-events-none
+    "
+        />
         <div className="flex justify-between gap-3 h-full">
           <Button
             variant={"outline"}
@@ -125,7 +132,7 @@ const NavBar = () => {
               }
             }}
             variant={"outline"}
-            className="rounded-full self-center size-10"
+            className="rounded-full self-center size-10 bg-transparent"
           >
             {!playing ? (
               <IconPlayerPlay stroke={2} />
