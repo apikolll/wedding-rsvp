@@ -28,6 +28,16 @@ const DoorOpenIntro = ({
     }
   }, [isFullyOpen]);
 
+  useLayoutEffect(() => {
+    // Reset scroll position on mount (handles refresh)
+    window.scrollTo(0, 0);
+
+    // Also disable browser's scroll restoration so it doesn't fight us
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+  }, []);
+
   const handleOpen = () => {
     if (isOpening) return;
     setIsOpening(true);
@@ -41,18 +51,6 @@ const DoorOpenIntro = ({
         className={`fixed inset-0 z-50 ${isFullyOpen ? "hidden" : ""}`}
         aria-hidden={isFullyOpen}
       >
-        {/* Blurred background image */}
-        {/* <div
-          className="absolute inset-0 bg-cover bg-center backdrop-blur-xs"
-          style={
-            {
-              // backgroundImage: `url(${backgroundImage})`,
-              // filter: "blur(20px)",
-              // transform: "scale(1.1)",
-            }
-          }
-        /> */}
-
         {/* Soft white overlay */}
         <div className="absolute inset-0 bg-white/30" />
 
@@ -61,7 +59,7 @@ const DoorOpenIntro = ({
           className={`
             absolute top-0 left-0 h-full w-1/2
             bg-white/20 backdrop-blur-xs
-            border-r border-white/20
+            // border-r border-white/5
             origin-left
             transition-transform duration-1800
             ${
@@ -80,7 +78,7 @@ const DoorOpenIntro = ({
           className={`
             absolute top-0 right-0 h-full w-1/2
             bg-white/20 backdrop-blur-xs
-            border-l border-white/20
+            // border-l border-white/5
             origin-right
             transition-transform duration-1800
             ${
@@ -126,7 +124,7 @@ const DoorOpenIntro = ({
                 //   fontFamily: "var(--font-script, 'Brush Script MT', cursive)",
                 // }}
               >
-                {brideName}
+                {groomName}
               </span>
               <span
                 className="text-2xl text-neutral-800 leading-tight -mt-1 font-allura"
@@ -134,9 +132,9 @@ const DoorOpenIntro = ({
                 //   fontFamily: "var(--font-script, 'Brush Script MT', cursive)",
                 // }}
               >
-                {groomName}
+                {brideName}
               </span>
-              <span className="mt-3 text-[11px] tracking-[0.3em] text-neutral-600 font-medium">
+              <span className="mt-3 text-[11px] tracking-[0.3em] text-neutral-600 font-medium font-serif">
                 {ctaText}
               </span>
             </div>
