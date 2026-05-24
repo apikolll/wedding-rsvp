@@ -95,7 +95,7 @@ const Gallery = () => {
         />
 
         <Image
-          src="/images/E-109.jpg"
+          src="/images/E-57.jpg"
           alt="Gallery 4"
           width={400}
           height={600}
