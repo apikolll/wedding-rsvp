@@ -68,7 +68,7 @@ const DoorOpenIntro = ({
     setTimeout(() => {
       if (cancelled) return;
 
-      const pixelsPerSecond = 25; // slow but readable — tune here
+      const pixelsPerSecond = 55; // slow but readable — tune here
       let lastFrame = performance.now();
       let scrollY = window.scrollY; // track in float, not integer
 
