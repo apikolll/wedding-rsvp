@@ -42,7 +42,59 @@ const DoorOpenIntro = ({
     if (isOpening) return;
     setIsOpening(true);
     onOpen?.();
-    setTimeout(() => setIsFullyOpen(true), 1800);
+    setTimeout(() => {
+      setIsFullyOpen(true);
+
+      startAutoScroll();
+    }, 1800);
+  };
+
+  const startAutoScroll = () => {
+    let cancelled = false;
+
+    const stopAutoScroll = () => {
+      cancelled = true;
+      window.removeEventListener("wheel", stopAutoScroll);
+      window.removeEventListener("touchmove", stopAutoScroll);
+      window.removeEventListener("keydown", stopAutoScroll);
+      window.removeEventListener("mousedown", stopAutoScroll);
+    };
+
+    window.addEventListener("wheel", stopAutoScroll, { passive: true });
+    window.addEventListener("touchmove", stopAutoScroll, { passive: true });
+    window.addEventListener("keydown", stopAutoScroll);
+    window.addEventListener("mousedown", stopAutoScroll);
+
+    setTimeout(() => {
+      if (cancelled) return;
+
+      const pixelsPerSecond = 25; // slow but readable — tune here
+      let lastFrame = performance.now();
+      let scrollY = window.scrollY; // track in float, not integer
+
+      const scroll = (now: number) => {
+        if (cancelled) return;
+
+        const delta = (now - lastFrame) / 1000;
+        lastFrame = now;
+
+        scrollY += pixelsPerSecond * delta;
+
+        const totalHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
+
+        if (scrollY >= totalHeight) {
+          window.scrollTo(0, totalHeight);
+          stopAutoScroll();
+          return;
+        }
+
+        window.scrollTo(0, scrollY);
+        requestAnimationFrame(scroll);
+      };
+
+      requestAnimationFrame(scroll);
+    }, 1500);
   };
 
   return (
