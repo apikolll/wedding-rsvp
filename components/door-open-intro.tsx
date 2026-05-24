@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 
 interface DoorOpenIntroProps {
   onOpen?: () => void;
@@ -22,19 +22,10 @@ const DoorOpenIntro = ({
   const [isFullyOpen, setIsFullyOpen] = useState(false);
 
   // Lock body scroll until doors are fully open
-  useEffect(() => {
-    if (isFullyOpen) return;
-
-    const originalOverflow = document.body.style.overflow;
-    const originalTouchAction = document.body.style.touchAction;
-
-    document.body.style.overflow = "hidden";
-    document.body.style.touchAction = "none";
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      document.body.style.touchAction = originalTouchAction;
-    };
+  useLayoutEffect(() => {
+    if (isFullyOpen) {
+      document.documentElement.classList.remove("intro-locked");
+    }
   }, [isFullyOpen]);
 
   const handleOpen = () => {

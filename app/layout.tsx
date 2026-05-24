@@ -67,6 +67,7 @@ export default function RootLayout({
         dmSerif.variable,
         allura.variable,
         samantha.variable,
+        "intro-locked",
       )}
     >
       <head>
