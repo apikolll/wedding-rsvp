@@ -45,8 +45,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Afiq & Athirah – Wedding RSVP",
-  description: "Specially designed and develop by Afiq & Athirah",
+  title: "Afiq & Athirah · Walimatulurus",
+  description: "Ahad, 28 Jun 2026 · Klik untuk RSVP 🤍",
+  metadataBase: new URL("https://cintahathiafiq.com"),
+  openGraph: {
+    title: "Afiq & Athirah · Walimatulurus",
+    description: "Ahad, 28 Jun 2026 · Klik untuk RSVP 🤍",
+    url: "https://cintahathiafiq.com",
+    siteName: "Afiq & Athirah Wedding",
+    images: [
+      {
+        url: "/icon.png",
+        width: 1200,
+        height: 630,
+        alt: "Afiq & Athirah Wedding Invitation",
+      },
+    ],
+    locale: "ms_MY",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
