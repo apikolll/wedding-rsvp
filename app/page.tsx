@@ -12,6 +12,8 @@ import WeddingItenary from "@/section/WeddingItinerary";
 import Image from "next/image";
 
 export default function Home() {
+
+  
   return (
     <main className="mt-10 overflow-x-hidden max-w-md mx-auto overscroll-x-contain">
       <AudioPlayerProvider>
