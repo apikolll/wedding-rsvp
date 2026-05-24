@@ -1,5 +1,7 @@
+"use client";
+import DoorOpenIntro from "@/components/door-open-intro";
 import NavBar from "@/components/nav-bar";
-import AudioPlayerProvider from "@/context/AudioPlayerContext";
+import { useAudioPlayer } from "@/context/AudioPlayerContext";
 import CountDown from "@/section/CountDown";
 import DateDetails from "@/section/DateDetails";
 import Dua from "@/section/Dua";
@@ -12,11 +14,21 @@ import WeddingItenary from "@/section/WeddingItinerary";
 import Image from "next/image";
 
 export default function Home() {
+  const { play } = useAudioPlayer();
 
-  
   return (
     <main className="mt-10 overflow-x-hidden max-w-md mx-auto overscroll-x-contain">
-      <AudioPlayerProvider>
+      <DoorOpenIntro
+        brideName="Athirah"
+        groomName="Afiq"
+        ctaText="BUKA"
+        onOpen={() => {
+          // This click is a guaranteed user gesture — audio will play
+          play({
+            src: "https://umtctumwfvjpuk5g.public.blob.vercel-storage.com/Dayang%20Nurfaizah%2C%20Hael%20Husaini%20-%20Gurindam%20Jiwa%20%28SPOTISAVER%29.mp3",
+          });
+        }}
+      >
         <Image
           src={"/logo.png"}
           alt="logo"
@@ -36,7 +48,7 @@ export default function Home() {
         <Gallery />
         <Dua />
         <NavBar />
-      </AudioPlayerProvider>
+      </DoorOpenIntro>
     </main>
   );
 }

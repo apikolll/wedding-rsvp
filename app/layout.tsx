@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import localFont from "next/font/local";
 import { Toaster } from "sonner";
 import Providers from "./provider";
+import AudioPlayerProvider from "@/context/AudioPlayerContext";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -73,7 +74,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <main>
-          <Providers>{children}</Providers>
+          <Providers>
+            <AudioPlayerProvider>{children}</AudioPlayerProvider>
+          </Providers>
         </main>
         <Toaster
           position="top-center"

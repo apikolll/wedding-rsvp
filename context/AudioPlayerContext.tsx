@@ -279,29 +279,6 @@ const AudioPlayerProvider = ({ children }: { children: ReactNode }) => {
     audio.addEventListener("pause", onPause);
     audio.addEventListener("ended", onEnded);
 
-    // First-interaction autoplay — uses the SAME audio element
-    const handleFirstInteraction = () => {
-      audio.play().catch((err) => {
-        console.error("Playback failed:", err.name, err.message);
-      });
-
-      window.removeEventListener("scroll", handleFirstInteraction);
-      window.removeEventListener("click", handleFirstInteraction);
-      window.removeEventListener("touchstart", handleFirstInteraction);
-      window.removeEventListener("pointerdown", handleFirstInteraction);
-      window.removeEventListener("keydown", handleFirstInteraction);
-    };
-
-    window.addEventListener("scroll", handleFirstInteraction, {
-      passive: true,
-    });
-    window.addEventListener("click", handleFirstInteraction);
-    window.addEventListener("touchstart", handleFirstInteraction, {
-      passive: true,
-    });
-    window.addEventListener("pointerdown", handleFirstInteraction);
-    window.addEventListener("keydown", handleFirstInteraction);
-
     return () => {
       audio.pause();
       audio.removeEventListener("timeupdate", onTimeUpdate);
@@ -309,11 +286,6 @@ const AudioPlayerProvider = ({ children }: { children: ReactNode }) => {
       audio.removeEventListener("play", onPlay);
       audio.removeEventListener("pause", onPause);
       audio.removeEventListener("ended", onEnded);
-      window.removeEventListener("scroll", handleFirstInteraction);
-      window.removeEventListener("click", handleFirstInteraction);
-      window.removeEventListener("touchstart", handleFirstInteraction);
-      window.removeEventListener("pointerdown", handleFirstInteraction);
-      window.removeEventListener("keydown", handleFirstInteraction);
     };
   }, []);
 
