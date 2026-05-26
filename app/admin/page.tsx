@@ -64,7 +64,7 @@ const AdminPage = () => {
     );
 
   return (
-    <main className="px-5 pb-10">
+    <main className="px-5 pb-10 max-h-screen overflow-scroll">
       <div className="mt-10">
         <h1 className="font-allura text-5xl text-center italic">RSVP data</h1>
       </div>
@@ -133,7 +133,9 @@ const AdminPage = () => {
         <TableBody>
           {filtereddata?.map((item) => (
             <TableRow key={item.id} className="text-center">
-              <TableCell className="font-medium">{item.name}</TableCell>
+              <TableCell className="font-medium font-serif text-lg">
+                {item.name}
+              </TableCell>
               <TableCell>
                 <Badge
                   className={clsx(
@@ -145,11 +147,13 @@ const AdminPage = () => {
                   )}
                   variant={"secondary"}
                 >
-                  {item.status}
+                  {item.status === "accept" ? "Hadir" : "Tidak hadir"}
                 </Badge>
               </TableCell>
-              <TableCell>{item.pax || "N/A"}</TableCell>
-              <TableCell className="text-center text-pretty capitalize max-w-100 whitespace-break-spaces">
+              <TableCell className="font-serif text-lg">
+                {item.pax || "N/A"} orang
+              </TableCell>
+              <TableCell className="text-center text-pretty capitalize max-w-100 whitespace-break-spaces font-serif text-lg">
                 {item.notes || "N/A"}
               </TableCell>
               <TableCell>{dayjs(item.createdAt).format("LLL")}</TableCell>
