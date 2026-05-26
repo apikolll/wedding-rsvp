@@ -42,7 +42,9 @@ const AdminPage = () => {
   const hadir = useMemo(() => {
     if (isPending) return;
 
-    return data?.filter((item) => item.status === "accept");
+    return data
+      ?.filter((item) => item.status === "accept")
+      .reduce((acc, cur) => acc + cur.pax, 0);
   }, [data, isPending]);
 
   const tidakHadir = useMemo(() => {
@@ -86,7 +88,7 @@ const AdminPage = () => {
           </CardHeader>
           <CardContent>
             <h1 className="text-4xl font-bold font-serif text-green-700">
-              {hadir?.length}
+              {hadir}
             </h1>
           </CardContent>
         </Card>
