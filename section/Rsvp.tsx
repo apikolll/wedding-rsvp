@@ -27,7 +27,7 @@ const schema = z.discriminatedUnion("status", [
   z.object({
     name: z.string().min(1, "Name is required.").max(100, "Name too long"),
     status: z.literal("accept"),
-    pax: z.number().min(1, "Minimum pax is 1.").max(3, "Maximum pax is 3."),
+    pax: z.number().min(1, "Minimum pax is 1.").max(2, "Maximum pax is 2."),
     notes: z.string().max(300, "Notes is too long").nullable(),
   }),
   z.object({
@@ -260,10 +260,10 @@ const Rsvp = () => {
                           type="button"
                           className="size-10 rounded-full text-lg bg-[#FFFDF3] text-[#2A2722] border border-[#2A272220]"
                           onClick={() => {
-                            if (Number(field.value) > 2) return;
+                            if (Number(field.value) >= 2) return;
                             field.onChange(Number(field.value) + 1);
                           }}
-                          disabled={Number(field.value) === 3}
+                          disabled={Number(field.value) === 2}
                           aria-invalid={error?.type === "too_small"}
                         >
                           +
