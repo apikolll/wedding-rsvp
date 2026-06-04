@@ -24,7 +24,9 @@ export async function GET() {
       // Poll every 3 seconds and push new data
       const interval = setInterval(async () => {
         try {
-          const rsvp = await prisma.user.findMany({});
+          const rsvp = await prisma.user.findMany({
+            include: { reference: true },
+          });
           send(rsvp);
         } catch (err) {
           console.error("RSVP stream poll failed:", err);
