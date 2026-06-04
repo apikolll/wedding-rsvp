@@ -369,4 +369,4 @@ const Rsvp = () => {
   );
 };
 
-export default Rsvp;
+export default memo(Rsvp);
