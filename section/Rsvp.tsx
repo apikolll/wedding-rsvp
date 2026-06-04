@@ -22,6 +22,8 @@ import { toast } from "sonner";
 import { IconCalendar, IconCheck, IconUsers } from "@tabler/icons-react";
 
 import { z } from "zod";
+import { useSearchParams } from "next/navigation";
+import { memo, useEffect } from "react";
 
 const schema = z.discriminatedUnion("status", [
   z.object({
@@ -68,6 +70,9 @@ const showSuccessToast = (message: string, pax?: number) => {
 const Rsvp = () => {
   const queryClient = useQueryClient();
 
+  const param = useSearchParams();
+  const referenceNumber = param.get("ref");
+
   const methods = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -90,14 +95,58 @@ const Rsvp = () => {
   // eslint-disable-next-line react-hooks/incompatible-library
   const status = watch("status");
 
+  // const onSubmit = handleSubmit(async (data) => {
+  //   try {
+  //     const res = await fetch("/api/rsvp", {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       method: "POST",
+  //       body: JSON.stringify({ ...data, ref: localStorage.getItem("ref") }),
+  //     });
+
+  //     if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+
+  //     const response = await res.json();
+
+  //     reset();
+  //     queryClient.invalidateQueries({ queryKey: ["rsvp"] });
+
+  //     if (response.status === "decline") {
+  //       showSuccessToast("Terima kasih atas maklum balas anda.");
+  //     } else {
+  //       showSuccessToast(
+  //         "Terima kasih, kami nantikan kehadiran anda.",
+  //         response.pax,
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // });
+
   const onSubmit = handleSubmit(async (data) => {
     try {
+      // Prefer the live param; fall back to the persisted one.
+      const ref = referenceNumber ?? localStorage.getItem("ref");
+
+      // Build the payload explicitly so `pax` never leaks on decline.
+      const payload =
+        data.status === "decline"
+          ? { name: data.name, status: data.status, notes: data.notes }
+          : {
+              name: data.name,
+              status: data.status,
+              pax: data.pax,
+              notes: data.notes,
+            };
+
       const res = await fetch("/api/rsvp", {
         headers: {
           "Content-Type": "application/json",
         },
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...payload, ref }),
       });
 
       if (!res.ok) throw new Error(`Request failed: ${res.status}`);
@@ -116,9 +165,16 @@ const Rsvp = () => {
         );
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      toast.error("Maaf, ada masalah. Sila cuba lagi.");
     }
   });
+
+  useEffect(() => {
+    if (!referenceNumber) return;
+
+    localStorage.setItem("ref", referenceNumber);
+  }, [referenceNumber]);
 
   return (
     <section id="rsvp" className="bg-card mt-10 pb-20 overflow-hidden">
@@ -167,7 +223,7 @@ const Rsvp = () => {
 
               <Field>
                 <FieldLabel
-                  htmlFor="name"
+                  htmlFor="status"
                   className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
                 >
                   {/* Will you attend ? */}
@@ -179,7 +235,7 @@ const Rsvp = () => {
                   control={control}
                   render={({ field }) => (
                     <RadioGroup
-                      defaultValue={field.value}
+                      value={field.value}
                       className="flex gap-3 justify-center max-w-sm mx-auto"
                       onValueChange={(val) => {
                         field.onChange(val);
@@ -230,7 +286,7 @@ const Rsvp = () => {
               {status === "accept" && (
                 <Field>
                   <FieldLabel
-                    htmlFor="name"
+                    htmlFor="pax"
                     className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
                   >
                     {/* Pax ( incl. yourself ) */}
@@ -276,7 +332,7 @@ const Rsvp = () => {
 
               <Field>
                 <FieldLabel
-                  htmlFor="name"
+                  htmlFor="notes"
                   className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
                 >
                   {/* A note for the couple (optional) */}
@@ -313,4 +369,4 @@ const Rsvp = () => {
   );
 };
 
-export default Rsvp;
+export default memo(Rsvp);

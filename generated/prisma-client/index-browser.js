@@ -126,6 +126,14 @@ exports.Prisma.UserScalarFieldEnum = {
   status: 'status',
   notes: 'notes',
   pax: 'pax',
+  createdAt: 'createdAt',
+  referenceId: 'referenceId'
+};
+
+exports.Prisma.ReferenceScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  referenceId: 'referenceId',
   createdAt: 'createdAt'
 };
 
@@ -149,7 +157,8 @@ exports.Status = exports.$Enums.Status = {
 };
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  Reference: 'Reference'
 };
 
 /**

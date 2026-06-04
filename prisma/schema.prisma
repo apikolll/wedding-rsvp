@@ -19,6 +19,20 @@ model User {
     pax    Int?
 
     createdAt DateTime @default(now())
+
+    reference   Reference? @relation(fields: [referenceId], references: [id])
+    referenceId String?
+}
+
+model Reference {
+    id String @id @default(uuid())
+
+    name String
+
+    referenceId String @unique
+    user        User[]
+
+    createdAt DateTime @default(now())
 }
 
 enum Status {

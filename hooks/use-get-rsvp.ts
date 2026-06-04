@@ -1,4 +1,5 @@
 "use client";
+import { Reference } from "@/generated/prisma-client";
 import { useQuery } from "@tanstack/react-query";
 
 type RSVP = {
@@ -8,6 +9,7 @@ type RSVP = {
   pax: number;
   notes?: string;
   createdAt: string;
+  reference?: Reference;
 };
 
 const fetchRSVP = async (): Promise<RSVP[]> => {

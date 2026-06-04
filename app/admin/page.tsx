@@ -15,7 +15,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { IconSearch } from "@tabler/icons-react";
+import { IconLink, IconSearch } from "@tabler/icons-react";
 import { Badge } from "@/components/ui/badge";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
@@ -24,11 +24,14 @@ import useRSVPStream from "@/hooks/use-rsvp-stream";
 import dayjs from "dayjs";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
 
+import { LinkList } from "./component/link-drawer";
+
 dayjs.extend(LocalizedFormat);
 
 const AdminPage = () => {
   useRSVPStream();
   const { data, isPending, isError, error } = useGetRSVP();
+
   const [search, setSearch] = useState("");
 
   const filtereddata = useMemo(() => {
@@ -68,7 +71,6 @@ const AdminPage = () => {
       <div className="mt-10">
         <h1 className="font-allura text-5xl text-center italic">RSVP data</h1>
       </div>
-
       <div className="flex justify-between gap-3 my-10 flex-col md:flex-row">
         <Card className="flex-1">
           <CardHeader>
@@ -106,6 +108,10 @@ const AdminPage = () => {
         </Card>
       </div>
 
+      <div className="text-right">
+        <LinkList />
+      </div>
+
       <InputGroup className="max-w-full my-5">
         <InputGroupInput
           value={search}
@@ -119,7 +125,6 @@ const AdminPage = () => {
           {filtereddata?.length} results
         </InputGroupAddon>
       </InputGroup>
-
       <Table>
         <TableHeader>
           <TableRow>
@@ -127,6 +132,7 @@ const AdminPage = () => {
             <TableHead className="text-center">Status Kehadiran</TableHead>
             <TableHead className="text-center">Bilangan kehadiran</TableHead>
             <TableHead className="text-center">Ucapan</TableHead>
+            <TableHead className="text-center">Jemputan</TableHead>
             <TableHead className="text-center">Tarikh</TableHead>
           </TableRow>
         </TableHeader>
@@ -156,6 +162,7 @@ const AdminPage = () => {
               <TableCell className="text-center text-pretty capitalize max-w-100 whitespace-break-spaces font-serif text-lg">
                 {item.notes || "N/A"}
               </TableCell>
+              <TableCell>{item?.reference?.name ?? "Afiq"}</TableCell>
               <TableCell>{dayjs(item.createdAt).format("LLL")}</TableCell>
             </TableRow>
           ))}

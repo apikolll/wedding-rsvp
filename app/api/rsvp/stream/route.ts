@@ -13,7 +13,9 @@ export async function GET() {
 
       // Send immediately on connect
       try {
-        const rsvp = await prisma.user.findMany({});
+        const rsvp = await prisma.user.findMany({
+          include: { reference: true },
+        });
         send(rsvp);
       } catch (err) {
         console.error("RSVP stream initial fetch failed:", err);

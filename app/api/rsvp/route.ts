@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const rsvp = await prisma.user.findMany({});
+    const rsvp = await prisma.user.findMany({ include: { reference: true } });
 
     return NextResponse.json(rsvp, { status: 200 });
   } catch (err) {
@@ -32,12 +32,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    let ref = null;
+
+    if (data?.ref) {
+      ref = await prisma.reference.findFirst({
+        where: {
+          referenceId: { equals: data.ref, mode: "insensitive" },
+        },
+      });
+    }
+
     const rsvp = await prisma.user.create({
       data: {
         name: data.name,
         status: data.status as Status,
         notes: data.notes ?? null,
-        pax: data.pax ?? null,
+        pax: data.status === "accept" ? (data.pax ?? null) : null,
+        referenceId: ref?.id,
       },
     });
 

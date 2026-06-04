@@ -9,9 +9,12 @@ import Gallery from "@/section/Gallery";
 import Hero from "@/section/Hero";
 import InvitationDetails from "@/section/InvitationDetails";
 import Location from "@/section/Location";
-import Rsvp from "@/section/Rsvp";
+// import Rsvp from "@/section/Rsvp";
 import WeddingItenary from "@/section/WeddingItinerary";
 import Image from "next/image";
+import { lazy } from "react";
+
+const RsvpSection = lazy(() => import("@/section/Rsvp"));
 
 export default function Home() {
   const { play } = useAudioPlayer();
@@ -44,7 +47,7 @@ export default function Home() {
         <WeddingItenary />
         <InvitationDetails />
         <Location />
-        <Rsvp />
+        <RsvpSection />
         <Gallery />
         <Dua />
         <NavBar />
