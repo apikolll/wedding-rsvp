@@ -15,7 +15,9 @@ function generateReferenceNumber(length = 6): string {
 
 export async function GET() {
   try {
-    const references = await prisma.reference.findMany({});
+    const references = await prisma.reference.findMany({
+      include: { user: true },
+    });
 
     return NextResponse.json(references, { status: 200 });
   } catch (err) {

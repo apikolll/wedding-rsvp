@@ -15,46 +15,91 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { IconLink, IconSearch } from "@tabler/icons-react";
+import { IconSearch, IconTrash } from "@tabler/icons-react";
 import { Badge } from "@/components/ui/badge";
 import clsx from "clsx";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import useRSVPStream from "@/hooks/use-rsvp-stream";
 import dayjs from "dayjs";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
 
 import { LinkList } from "./component/link-drawer";
+import { useGetLinks } from "./hooks/use-get-links";
+import { Button } from "@/components/ui/button";
+import { Status, User } from "@/generated/prisma-client";
 
 dayjs.extend(LocalizedFormat);
 
 const AdminPage = () => {
   useRSVPStream();
   const { data, isPending, isError, error } = useGetRSVP();
+  const { data: links, isPending: isLinksPending } = useGetLinks();
 
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("");
 
-  const filtereddata = useMemo(() => {
-    if (!search) return data;
+  const filteredData = useMemo(() => {
+    if (!search && !filter) return data;
 
-    return data?.filter((a) =>
-      a.name.toLowerCase().includes(search.toLowerCase()),
+    return data?.filter(
+      (a) =>
+        a.name.toLowerCase().includes(search.toLowerCase()) &&
+        a.reference?.referenceId === filter,
     );
-  }, [data, search]);
+  }, [data, search, filter]);
+
+  const total = useMemo(() => {
+    if (isPending) return;
+
+    return data?.filter((item) => {
+      if (!filter) return true;
+      return item.reference?.referenceId === filter;
+    })?.length;
+  }, [data, filter, isPending]);
 
   const hadir = useMemo(() => {
     if (isPending) return;
 
     return data
-      ?.filter((item) => item.status === "accept")
+      ?.filter((item) => {
+        if (item.status !== "accept") return false;
+        if (!filter) return true;
+        return item.reference?.referenceId === filter;
+      })
       .reduce((acc, cur) => acc + cur.pax, 0);
-  }, [data, isPending]);
+  }, [data, isPending, filter]);
 
   const tidakHadir = useMemo(() => {
     if (isPending) return;
 
-    return data?.filter((item) => item.status === "decline");
-  }, [data, isPending]);
+    return data?.filter((item) => {
+      if (item.status !== "decline") return false;
+      if (!filter) return true;
+      return item.reference?.referenceId === filter;
+    });
+  }, [data, isPending, filter]);
+
+  const getTotalPax = useCallback(
+    (id: string, status: Status) => {
+      if (!id || !status || isLinksPending) return;
+
+      if (status === "accept") {
+        return data
+          ?.filter(
+            (item) => item.status === "accept" && item.reference?.id === id,
+          )
+          .reduce((acc, cur) => acc + cur.pax, 0);
+      }
+
+      if (status === "decline") {
+        return data?.filter(
+          (item) => item.status === "decline" && item.reference?.id === id,
+        ).length;
+      }
+    },
+    [data, isLinksPending],
+  );
 
   if (isPending)
     return <Spinner className="absolute top-1/2 left-1/2 size-6" />;
@@ -79,7 +124,7 @@ const AdminPage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <h1 className="text-4xl font-bold font-serif">{data?.length}</h1>
+            <h1 className="text-4xl font-bold font-serif">{total}</h1>
           </CardContent>
         </Card>
         <Card className="flex-1">
@@ -107,9 +152,56 @@ const AdminPage = () => {
           </CardContent>
         </Card>
       </div>
-
       <div className="text-right">
         <LinkList />
+      </div>
+
+      <div className="flex gap-2 items-center overflow-scroll mt-2 scrollbar-none">
+        {!!links?.length &&
+          links.map((link) => (
+            <Button
+              key={link.id}
+              variant={filter === link.referenceId ? "default" : "outline"}
+              onClick={() => setFilter(link.referenceId)}
+              className="cursor-pointer p-5 h-20"
+            >
+              {link.name}
+
+              {!!link.user.length ? (
+                <>
+                  <Badge
+                    variant={"secondary"}
+                    className="text-green-700 bg-green-100"
+                  >
+                    {getTotalPax(link.id, "accept") || 0} hadir
+                  </Badge>
+                  <Badge
+                    variant={"secondary"}
+                    className="text-red-700 bg-red-100"
+                  >
+                    {getTotalPax(link.id, "decline") || 0} tidak hadir
+                  </Badge>
+                </>
+              ) : (
+                <Badge variant={"secondary"}>{0}</Badge>
+              )}
+            </Button>
+          ))}
+
+        {(filter || search) && (
+          <Button
+            variant={"ghost"}
+            size={"xs"}
+            className="ml-3 text-red-500 hover:bg-red-100 hover:text-red-500 cursor-pointer"
+            onClick={() => {
+              setFilter("");
+              setSearch("");
+            }}
+          >
+            <IconTrash />
+            Clear
+          </Button>
+        )}
       </div>
 
       <InputGroup className="max-w-full my-5">
@@ -122,7 +214,7 @@ const AdminPage = () => {
           <IconSearch stroke={2} />
         </InputGroupAddon>
         <InputGroupAddon align="inline-end">
-          {filtereddata?.length} results
+          {filteredData?.length} results
         </InputGroupAddon>
       </InputGroup>
       <Table>
@@ -137,9 +229,9 @@ const AdminPage = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filtereddata?.map((item) => (
+          {filteredData?.map((item) => (
             <TableRow key={item.id} className="text-center">
-              <TableCell className="font-medium font-serif text-lg">
+              <TableCell className="font-medium font-serif text-lg uppercase tracking-wide">
                 {item.name}
               </TableCell>
               <TableCell>
