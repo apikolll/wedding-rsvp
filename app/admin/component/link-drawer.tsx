@@ -57,7 +57,7 @@ export function LinkList() {
           Manage Links
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="min-w-xl">
+      <DrawerContent className="min-w-sm md:min-w-xl">
         <DrawerHeader>
           <DrawerTitle>Manage Reference Links</DrawerTitle>
           <DrawerDescription>
