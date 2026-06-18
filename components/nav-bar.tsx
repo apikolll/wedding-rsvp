@@ -127,7 +127,7 @@ const NavBar = () => {
                 pause();
               } else {
                 play({
-                  src: "https://umtctumwfvjpuk5g.public.blob.vercel-storage.com/Dayang%20Nurfaizah%2C%20Hael%20Husaini%20-%20Gurindam%20Jiwa%20%28SPOTISAVER%29.mp3",
+                  src: "/songs/gurindam_jiwa.mp3",
                 });
               }
             }}

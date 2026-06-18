@@ -28,7 +28,7 @@ export default function Home() {
         onOpen={() => {
           // This click is a guaranteed user gesture — audio will play
           play({
-            src: "https://umtctumwfvjpuk5g.public.blob.vercel-storage.com/Dayang%20Nurfaizah%2C%20Hael%20Husaini%20-%20Gurindam%20Jiwa%20%28SPOTISAVER%29.mp3",
+            src: "/songs/gurindam_jiwa.mp3",
           });
         }}
       >

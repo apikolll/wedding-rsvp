@@ -239,8 +239,10 @@ interface AudioPlayerContextValue {
   stop: () => void;
 }
 
-const DEFAULT_SRC =
-  "https://umtctumwfvjpuk5g.public.blob.vercel-storage.com/Dayang%20Nurfaizah%2C%20Hael%20Husaini%20-%20Gurindam%20Jiwa%20%28SPOTISAVER%29.mp3";
+// const DEFAULT_SRC =
+//   "https://umtctumwfvjpuk5g.public.blob.vercel-storage.com/Dayang%20Nurfaizah%2C%20Hael%20Husaini%20-%20Gurindam%20Jiwa%20%28SPOTISAVER%29.mp3";
+
+const DEFAULT_SRC = "/songs/gurindam_jiwa.mp3";
 
 const AudioPlayerContext = createContext<AudioPlayerContextValue | null>(null);
 
