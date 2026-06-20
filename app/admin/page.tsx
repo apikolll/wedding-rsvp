@@ -27,7 +27,7 @@ import LocalizedFormat from "dayjs/plugin/localizedFormat";
 import { LinkList } from "./component/link-drawer";
 import { useGetLinks } from "./hooks/use-get-links";
 import { Button } from "@/components/ui/button";
-import { Status, User } from "@/generated/prisma-client";
+import { Status } from "@/generated/prisma-client";
 
 dayjs.extend(LocalizedFormat);
 
@@ -38,25 +38,48 @@ const AdminPage = () => {
 
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
+  const [afiqFilter, setAfiqFilter] = useState(false);
 
   const filteredData = useMemo(() => {
-    if (!search && !filter) return data;
+    if (!search && !filter && !afiqFilter) return data;
 
-    return data?.filter(
-      (a) =>
-        a.name.toLowerCase().includes(search.toLowerCase()) &&
-        a.reference?.referenceId === filter,
-    );
-  }, [data, search, filter]);
+    return data?.filter((a) => {
+      if (filter && !search) {
+        return a.reference?.referenceId === filter;
+      }
+
+      if (filter && search) {
+        return (
+          a.name.toLowerCase().includes(search.toLowerCase()) &&
+          a.reference?.referenceId === filter
+        );
+      }
+
+      if (afiqFilter && !search) {
+        return !a.reference;
+      }
+
+      if (afiqFilter && search) {
+        return (
+          a.name.toLowerCase().includes(search.toLowerCase()) && !a.reference
+        );
+      }
+
+      return a.name.toLowerCase().includes(search.toLowerCase());
+    });
+  }, [data, search, filter, afiqFilter]);
 
   const total = useMemo(() => {
     if (isPending) return;
 
     return data?.filter((item) => {
-      if (!filter) return true;
+      if (!filter && !afiqFilter) return true;
+
+      if (afiqFilter) return !item.reference;
+
       return item.reference?.referenceId === filter;
     })?.length;
-  }, [data, filter, isPending]);
+  }, [data, filter, isPending, afiqFilter]);
 
   const hadir = useMemo(() => {
     if (isPending) return;
@@ -64,21 +87,44 @@ const AdminPage = () => {
     return data
       ?.filter((item) => {
         if (item.status !== "accept") return false;
-        if (!filter) return true;
+
+        if (!filter && !afiqFilter) return true;
+
+        if (afiqFilter) return !item.reference;
+
         return item.reference?.referenceId === filter;
       })
       .reduce((acc, cur) => acc + cur.pax, 0);
-  }, [data, isPending, filter]);
+  }, [data, isPending, filter, afiqFilter]);
 
   const tidakHadir = useMemo(() => {
     if (isPending) return;
 
     return data?.filter((item) => {
       if (item.status !== "decline") return false;
-      if (!filter) return true;
+
+      if (!filter && !afiqFilter) return true;
+
+      if (afiqFilter) return !item.reference;
+
       return item.reference?.referenceId === filter;
     });
-  }, [data, isPending, filter]);
+  }, [data, isPending, filter, afiqFilter]);
+
+  const getTotalHadirForAfiq = useMemo(() => {
+    if (!data?.length) return [];
+
+    return data
+      ?.filter((item) => !item.reference && item.status === "accept")
+      .reduce((acc, cur) => acc + cur.pax, 0);
+  }, [data]);
+
+  const getTotalTidakHadirForAfiq = useMemo(() => {
+    if (!data?.length) return [];
+
+    return data?.filter((item) => !item.reference && item.status === "decline")
+      .length;
+  }, [data]);
 
   const getTotalPax = useCallback(
     (id: string, status: Status) => {
@@ -162,7 +208,10 @@ const AdminPage = () => {
             <Button
               key={link.id}
               variant={filter === link.referenceId ? "default" : "outline"}
-              onClick={() => setFilter(link.referenceId)}
+              onClick={() => {
+                setFilter(link.referenceId);
+                setAfiqFilter(false);
+              }}
               className="cursor-pointer p-5 h-20"
             >
               {link.name}
@@ -188,7 +237,32 @@ const AdminPage = () => {
             </Button>
           ))}
 
-        {(filter || search) && (
+        <Button
+          variant={afiqFilter ? "default" : "outline"}
+          onClick={() => {
+            setAfiqFilter(true);
+            if (filter) {
+              setFilter("");
+            }
+          }}
+          className="cursor-pointer p-5 h-20"
+        >
+          {"Afiq"}
+
+          <>
+            <Badge
+              variant={"secondary"}
+              className="text-green-700 bg-green-100"
+            >
+              {getTotalHadirForAfiq} hadir
+            </Badge>
+            <Badge variant={"secondary"} className="text-red-700 bg-red-100">
+              {getTotalTidakHadirForAfiq} tidak hadir
+            </Badge>
+          </>
+        </Button>
+
+        {(filter || search || afiqFilter) && (
           <Button
             variant={"ghost"}
             size={"xs"}
@@ -196,6 +270,7 @@ const AdminPage = () => {
             onClick={() => {
               setFilter("");
               setSearch("");
+              setAfiqFilter(false);
             }}
           >
             <IconTrash />
@@ -229,35 +304,37 @@ const AdminPage = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredData?.map((item) => (
-            <TableRow key={item.id} className="text-center">
-              <TableCell className="font-medium font-serif text-lg uppercase tracking-wide">
-                {item.name}
-              </TableCell>
-              <TableCell>
-                <Badge
-                  className={clsx(
-                    "uppercase rounded-sm",
-                    item.status === "accept" &&
-                      "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300 text-[12px]",
-                    item.status === "decline" &&
-                      "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300",
-                  )}
-                  variant={"secondary"}
-                >
-                  {item.status === "accept" ? "Hadir" : "Tidak hadir"}
-                </Badge>
-              </TableCell>
-              <TableCell className="font-serif text-lg">
-                {item.pax || "N/A"} orang
-              </TableCell>
-              <TableCell className="text-center text-pretty capitalize max-w-100 whitespace-break-spaces font-serif text-lg">
-                {item.notes || "N/A"}
-              </TableCell>
-              <TableCell>{item?.reference?.name ?? "Afiq"}</TableCell>
-              <TableCell>{dayjs(item.createdAt).format("LLL")}</TableCell>
-            </TableRow>
-          ))}
+          {filteredData
+            ?.sort((a, b) => dayjs(b.createdAt).diff(dayjs(a.createdAt)))
+            ?.map((item) => (
+              <TableRow key={item.id} className="text-center">
+                <TableCell className="font-medium font-serif text-lg uppercase tracking-wide">
+                  {item.name}
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    className={clsx(
+                      "uppercase rounded-sm",
+                      item.status === "accept" &&
+                        "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300 text-[12px]",
+                      item.status === "decline" &&
+                        "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300",
+                    )}
+                    variant={"secondary"}
+                  >
+                    {item.status === "accept" ? "Hadir" : "Tidak hadir"}
+                  </Badge>
+                </TableCell>
+                <TableCell className="font-serif text-lg">
+                  {item.pax || "N/A"} orang
+                </TableCell>
+                <TableCell className="text-center text-pretty capitalize max-w-100 whitespace-break-spaces font-serif text-lg">
+                  {item.notes || "N/A"}
+                </TableCell>
+                <TableCell>{item?.reference?.name ?? "Afiq"}</TableCell>
+                <TableCell>{dayjs(item.createdAt).format("LLL")}</TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </main>
