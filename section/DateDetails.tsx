@@ -5,50 +5,55 @@ import Image from "next/image";
 const DateDetails = () => {
   return (
     <div className="relative">
-      <Image
+      {/* <Image
         src={"/flowers/flower_3.svg"}
         alt="flower_3"
         width={100}
         height={100}
         className="w-40 absolute -left-13 top-40"
-      />
+      /> */}
 
       <h1 className="font-serif italic text-center text-[16px] text-muted-foreground mt-10">
         {/* Invites you to celebrate their wedding */}
         Menjemput ke majlis perkahwinan kami
       </h1>
 
-      <p className="text-center font-samantha mt-7">Pada</p>
+      <div className="flex flex-col items-center justify-center my-10 space-y-6">
+        <p className="text-center font-gyahegi text-[10px] italic">Pada</p>
 
-      <div className="flex justify-center gap-10 mt-5">
-        <div className="inline-flex flex-col items-center gap-2">
-          <Divider width={80} />
-          <p className="font-serif italic text-[#6B6258]">Jun</p>
-          <Divider width={80} />
+        <div className="flex gap-10">
+          <div className="inline-flex flex-col items-center gap-2">
+            <Divider width={80} />
+            <p className="font-serif italic text-taupe">Disember</p>
+            <Divider width={80} />
+          </div>
+
+          <div className="inline-flex flex-col items-center">
+            <p className="font-serif text-4xl">05</p>
+            <p className="font-serif text-lg italic text-muted-foreground">
+              2026
+            </p>
+          </div>
+
+          <div className="inline-flex flex-col items-center gap-2">
+            <Divider width={80} />
+            <p className="font-serif italic text-taupe">11.00 Pagi</p>
+            <Divider width={80} />
+          </div>
         </div>
 
-        <div className="inline-flex flex-col items-center">
-          <p className="font-serif text-4xl">28</p>
-          <p className="font-serif text-lg italic text-muted-foreground">
-            2026
-          </p>
-        </div>
-
-        <div className="inline-flex flex-col items-center gap-2">
-          <Divider width={80} />
-          <p className="font-serif italic text-[#6B6258]">11.00 Pagi</p>
-          <Divider width={80} />
-        </div>
+        {/* <p className="text-center font-gyahegi text-[10px] italic">Di</p> */}
       </div>
 
-      <p className="text-center font-samantha mt-7">Di</p>
-
-      <div className="flex flex-col items-center justify-center mt-7">
-        <p className="font-serif text-xl">Bizmilla Grand Ballroom</p>
-        <p className="font-serif italic text-sm text-[#696969]">
+      {/* <div className="flex flex-col items-center justify-center mt-7">
+        <p className="font-serif text-xl">
+          368, Lorong Rhu 3/2, Taman Rhu 3, Tikam Batu, 08600, Sungai Petani,
+          Kedah
+        </p>
+        <p className="font-serif italic text-sm text-taupe">
           Eco Sanctuary, Selangor
         </p>
-      </div>
+      </div> */}
 
       <div className="flex items-center gap-3 justify-center my-7">
         <Divider width={80} />

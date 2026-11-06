@@ -14,7 +14,7 @@ export const StarDivider = ({
       <Plain
         className={clsx(
           "size-4",
-          theme === "dark" ? "text-[#6B6258]" : "text-white",
+          theme === "dark" ? "text-taupe" : "text-white",
         )}
       />
       <Divider width={80} color={theme} />

@@ -6,7 +6,7 @@ const Gallery = () => {
   return (
     <section id="gallery" className="mt-10">
       <div className="text-center flex flex-col gap-3 relative pt-5">
-        {/* <p className="uppercase tracking-[3px] text-[10px] text-[#6B6258]">
+        {/* <p className="uppercase tracking-[3px] text-[10px] text-taupe">
           Detik Manis
         </p> */}
         <h1 className="font-allura text-5xl">Detik Manis</h1>

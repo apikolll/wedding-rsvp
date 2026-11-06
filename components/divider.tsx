@@ -12,9 +12,9 @@ const Divider = ({
   return (
     <div
       className={clsx(
-        "bg-[#2A272220] opacity-100 w-40 h-px",
+        "bg-ink/12 h-px",
         orientation == "vertical" ? "rotate-90" : "rotate-0",
-        color === "light" && "bg-[#FFFFFF20]",
+        color === "light" && "bg-white/20",
       )}
       style={{ width: width }}
     />

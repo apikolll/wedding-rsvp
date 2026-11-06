@@ -1,5 +1,17 @@
 "use client";
 import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Button } from "./ui/button";
+import { AnimatePresence, motion } from "motion/react";
+import Image from "next/image";
+import CoupleNames from "./couple-names";
+import { IntroContext } from "@/context/IntroContext";
+import {
+  getSavedScrollY,
+  introAlreadyOpened,
+  markIntroOpened,
+  resolveIntroOpened,
+  saveScrollY,
+} from "@/lib/intro-session";
 
 interface DoorOpenIntroProps {
   onOpen?: () => void;
@@ -10,6 +22,8 @@ interface DoorOpenIntroProps {
   children?: React.ReactNode;
 }
 
+const MotionButton = motion.create(Button);
+
 const DoorOpenIntro = ({
   onOpen,
   brideName = "Athirah",
@@ -18,8 +32,12 @@ const DoorOpenIntro = ({
   backgroundImage = "/logo.png",
   children,
 }: DoorOpenIntroProps) => {
-  const [isOpening, setIsOpening] = useState(false);
-  const [isFullyOpen, setIsFullyOpen] = useState(false);
+  // On a client-side "back" (e.g. from /rsvp) we already know, so start open with no flash
+  const [skipped, setSkipped] = useState(introAlreadyOpened);
+  const [opening, setIsOpening] = useState(false);
+  const [fullyOpen, setIsFullyOpen] = useState(false);
+  const isOpening = opening || skipped;
+  const isFullyOpen = fullyOpen || skipped;
 
   // Lock body scroll until doors are fully open
   useLayoutEffect(() => {
@@ -29,17 +47,30 @@ const DoorOpenIntro = ({
   }, [isFullyOpen]);
 
   useLayoutEffect(() => {
-    // Reset scroll position on mount (handles refresh)
-    window.scrollTo(0, 0);
-
-    // Also disable browser's scroll restoration so it doesn't fight us
+    // Disable browser's scroll restoration so it doesn't fight us
     if ("scrollRestoration" in history) {
       history.scrollRestoration = "manual";
     }
+
+    if (resolveIntroOpened()) {
+      // Came back with the back button → skip the intro, return to where they were.
+      // Needs the browser's navigation type, which isn't known during SSR/hydration.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSkipped(true);
+      const y = getSavedScrollY();
+      requestAnimationFrame(() => window.scrollTo(0, y));
+    } else {
+      // Refresh / fresh visit → start from the top
+      window.scrollTo(0, 0);
+    }
+
+    // Remember the position for when they come back
+    return () => saveScrollY(window.scrollY);
   }, []);
 
   const handleOpen = () => {
     if (isOpening) return;
+    markIntroOpened();
     setIsOpening(true);
     onOpen?.();
     setTimeout(() => {
@@ -50,152 +81,153 @@ const DoorOpenIntro = ({
   };
 
   const startAutoScroll = () => {
+    const pixelsPerSecond = 60; // cruising speed — snaps to whole px per frame (60 = 1px/frame @60Hz)
+    const rampSeconds = 1; // time spent easing in to full speed
+    const stopEvents = [
+      "wheel",
+      "touchstart",
+      "pointerdown",
+      "keydown",
+    ] as const;
+
     let cancelled = false;
+    let frame = 0;
 
     const stopAutoScroll = () => {
       cancelled = true;
-      window.removeEventListener("wheel", stopAutoScroll);
-      window.removeEventListener("touchmove", stopAutoScroll);
-      window.removeEventListener("keydown", stopAutoScroll);
-      window.removeEventListener("mousedown", stopAutoScroll);
+      clearTimeout(startDelay);
+      cancelAnimationFrame(frame);
+      stopEvents.forEach((e) => window.removeEventListener(e, stopAutoScroll));
     };
 
-    window.addEventListener("wheel", stopAutoScroll, { passive: true });
-    window.addEventListener("touchmove", stopAutoScroll, { passive: true });
-    window.addEventListener("keydown", stopAutoScroll);
-    window.addEventListener("mousedown", stopAutoScroll);
+    stopEvents.forEach((e) =>
+      window.addEventListener(e, stopAutoScroll, { passive: true }),
+    );
 
-    setTimeout(() => {
-      if (cancelled) return;
+    const startDelay = setTimeout(() => {
+      // 1. Measure the display's refresh rate (60Hz, 90Hz, 120Hz…)
+      const samples: number[] = [];
+      let last = 0;
 
-      const pixelsPerSecond = 55; // slow but readable — tune here
-      let lastFrame = performance.now();
-      let scrollY = window.scrollY; // track in float, not integer
-
-      const scroll = (now: number) => {
+      const measure = (now: number) => {
         if (cancelled) return;
-
-        const delta = (now - lastFrame) / 1000;
-        lastFrame = now;
-
-        scrollY += pixelsPerSecond * delta;
-
-        const totalHeight =
-          document.documentElement.scrollHeight - window.innerHeight;
-
-        if (scrollY >= totalHeight) {
-          window.scrollTo(0, totalHeight);
-          stopAutoScroll();
+        if (last) samples.push(now - last);
+        last = now;
+        if (samples.length < 12) {
+          frame = requestAnimationFrame(measure);
           return;
         }
-
-        window.scrollTo(0, scrollY);
-        requestAnimationFrame(scroll);
+        samples.sort((a, b) => a - b);
+        const fps = 1000 / samples[Math.floor(samples.length / 2)];
+        run(fps);
       };
 
-      requestAnimationFrame(scroll);
+      // 2. Scroll whole pixels on a fixed frame cadence, so every step is
+      //    identical. Uneven 1px/2px (or 0px/1px) steps are what reads as judder.
+      const run = (fps: number) => {
+        const perFrame = pixelsPerSecond / fps;
+        const step = Math.max(1, Math.round(perFrame)); // px per move
+        const every = perFrame >= 1 ? 1 : Math.round(1 / perFrame); // frames per move
+        const rampFrames = Math.round(fps * rampSeconds);
+
+        let y = Math.round(window.scrollY);
+        let tick = 0;
+
+        const scroll = () => {
+          if (cancelled) return;
+          tick++;
+
+          // Ease in: move every 3rd, then 2nd "beat" before reaching cruise speed
+          const slow = tick < rampFrames / 2 ? 3 : tick < rampFrames ? 2 : 1;
+
+          if (tick % (every * slow) === 0) {
+            // Something else moved the page (e.g. an image loading above) — follow it
+            if (Math.abs(window.scrollY - y) > step + 1) {
+              y = Math.round(window.scrollY);
+            }
+
+            y += step;
+
+            const maxScroll =
+              document.documentElement.scrollHeight - window.innerHeight;
+            if (y >= maxScroll) {
+              window.scrollTo(0, maxScroll);
+              stopAutoScroll();
+              return;
+            }
+
+            window.scrollTo(0, y);
+          }
+
+          frame = requestAnimationFrame(scroll);
+        };
+
+        frame = requestAnimationFrame(scroll);
+      };
+
+      frame = requestAnimationFrame(measure);
     }, 1500);
   };
 
   return (
-    <>
-      <div
-        className={`fixed inset-0 z-50 ${isFullyOpen ? "hidden" : ""}`}
-        aria-hidden={isFullyOpen}
-      >
-        {/* Soft white overlay */}
-        <div className="absolute inset-0 bg-white/30" />
-
-        {/* Left door */}
-        <div
-          className={`
-            absolute top-0 left-0 h-full w-1/2
-            bg-white/20 backdrop-blur-xs
-            // border-r border-white/5
-            origin-left
-            transition-transform duration-1800
-            ${
-              isOpening
-                ? "transform-[perspective(1800px)_rotateY(-105deg)]"
-                : "transform-[perspective(1800px)_rotateY(0deg)]"
-            }
-          `}
-          style={{
-            transitionTimingFunction: "cubic-bezier(0.65, 0, 0.35, 1)",
-          }}
-        />
-
-        {/* Right door */}
-        <div
-          className={`
-            absolute top-0 right-0 h-full w-1/2
-            bg-white/20 backdrop-blur-xs
-            // border-l border-white/5
-            origin-right
-            transition-transform duration-1800
-            ${
-              isOpening
-                ? "transform-[perspective(1800px)_rotateY(105deg)]"
-                : "transform-[perspective(1800px)_rotateY(0deg)]"
-            }
-          `}
-          style={{
-            transitionTimingFunction: "cubic-bezier(0.65, 0, 0.35, 1)",
-          }}
-        />
-
-        {/* Center button */}
-        <div
-          className={`
-            absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-            transition-all duration-700 ease-out
-            ${isOpening ? "opacity-0 scale-75" : "opacity-100 scale-100"}
-          `}
-        >
-          <button
+    <IntroContext.Provider value={{ isOpen: isOpening, instant: skipped }}>
+      <AnimatePresence>
+        {!isOpening && (
+          <motion.div
+            key="intro-screen"
+            className="fixed inset-0 z-40 flex items-center justify-center"
+            exit={{ opacity: 0 }}
+            transition={{ duration: skipped ? 0 : 0.8, ease: "easeOut" }}
             onClick={handleOpen}
-            disabled={isOpening}
-            className="
-              group relative w-44 h-44 rounded-full
-              bg-white/80 backdrop-blur-xl
-              border border-white/60
-              shadow-[0_8px_40px_-8px_rgba(0,0,0,0.2)]
-              flex flex-col items-center justify-center
-              transition-all duration-500
-              hover:scale-105 active:scale-95
-              cursor-pointer
-            "
-            aria-label="Open invitation"
           >
-            <span className="absolute inset-0 rounded-full animate-doorPulse pointer-events-none" />
+            {/* Same image as the page background, so the intro covers the content seamlessly */}
+            <Image
+              src="/background/FirstScreen.png"
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center -z-10"
+            />
 
-            <div className="relative z-10 flex flex-col items-center px-6">
-              <span
-                className="text-2xl text-neutral-800 leading-tight font-allura"
-                // style={{
-                //   fontFamily: "var(--font-script, 'Brush Script MT', cursive)",
-                // }}
-              >
-                {groomName}
-              </span>
-              <span
-                className="text-2xl text-neutral-800 leading-tight -mt-1 font-allura"
-                // style={{
-                //   fontFamily: "var(--font-script, 'Brush Script MT', cursive)",
-                // }}
-              >
-                {brideName}
-              </span>
-              <span className="mt-3 text-[11px] tracking-[0.3em] text-neutral-600 font-medium font-serif">
-                {ctaText}
-              </span>
-            </div>
-          </button>
-        </div>
-      </div>
+            <CoupleNames
+              firstClassName="self-start sm:self-center ml-5 sm:mr-40"
+              secondClassName="self-end sm:self-center sm:ml-35"
+            />
 
-      {children}
-    </>
+            <motion.div
+              className="absolute bottom-20"
+              animate={{ y: [0, 40] }}
+              transition={{
+                repeat: Infinity,
+                repeatType: "reverse",
+                duration: 0.8,
+                ease: "easeInOut",
+              }}
+            >
+              <MotionButton
+                variant="ghost"
+                className="font-barley text-lg cursor-pointer transition-none hover:bg-transparent"
+                whileHover={{ scale: 1.12 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Tap to open
+              </MotionButton>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Coming back from /rsvp: fade the page in instead of popping in.
+          Opacity only — a transform here would break the fixed nav bar while it runs. */}
+      <motion.div
+        initial={skipped ? { opacity: 0 } : false}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      >
+        {children}
+      </motion.div>
+    </IntroContext.Provider>
   );
 };
 

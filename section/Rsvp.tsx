@@ -179,11 +179,11 @@ const Rsvp = () => {
   return (
     <section id="rsvp" className="bg-card mt-10 pb-20 overflow-hidden">
       <div className="text-center pt-15 flex flex-col gap-4 relative">
-        <p className="uppercase tracking-[3px] text-[10px] text-[#6B6258]">
+        <p className="uppercase tracking-[3px] text-[10px] text-taupe">
           Sila sahkan kehadiran
         </p>
         <h1 className="font-allura font-medium text-6xl">R.S.V.P</h1>
-        <p className="font-serif text-[14px] text-[#6B6258] italic">
+        <p className="font-serif text-[14px] text-taupe italic">
           sebelum 14 Jun 2026
         </p>
         <Flower className={"size-30 absolute -right-3 top-13"} />
@@ -201,7 +201,7 @@ const Rsvp = () => {
                   <Field>
                     <FieldLabel
                       htmlFor="name"
-                      className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
+                      className="text-taupe uppercase tracking-[2px] text-[10px]"
                     >
                       Nama
                     </FieldLabel>
@@ -209,11 +209,11 @@ const Rsvp = () => {
                       {...field}
                       autoComplete="off"
                       placeholder="Nama anda"
-                      className="bg-[#FFFDF380] rounded-sm py-5 border border-[#2A272220] placeholder:text-sm text-md font-serif"
+                      className="bg-ivory/50 rounded-sm py-5 border border-ink/12 placeholder:text-sm text-md font-serif"
                       aria-invalid={!!error}
                     />
                     {error && (
-                      <FieldDescription className="text-red-500 text-[10px]">
+                      <FieldDescription className="text-destructive text-[10px]">
                         {error.message}
                       </FieldDescription>
                     )}
@@ -224,7 +224,7 @@ const Rsvp = () => {
               <Field>
                 <FieldLabel
                   htmlFor="status"
-                  className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
+                  className="text-taupe uppercase tracking-[2px] text-[10px]"
                 >
                   {/* Will you attend ? */}
                   Sahkan kehadiran anda
@@ -243,9 +243,9 @@ const Rsvp = () => {
                     >
                       <FieldLabel
                         htmlFor="rsvp-accept"
-                        className="flex-1 justify-center has-data-[state=checked]:bg-[#2A2722] has-data-[state=checked]:text-[#FFFDF3]"
+                        className="flex-1 justify-center has-data-[state=checked]:bg-ink has-data-[state=checked]:text-ivory"
                       >
-                        <Field className="items-center text-center cursor-pointer flex-1 border-[#2A2722] border rounded-sm">
+                        <Field className="items-center text-center cursor-pointer flex-1 border-ink border rounded-sm">
                           <FieldContent className="items-center justify-center">
                             <FieldTitle className="uppercase text-[12px] tracking-[1px]">
                               {/* Joyfully Accept */}
@@ -262,10 +262,10 @@ const Rsvp = () => {
 
                       <FieldLabel
                         htmlFor="rsvp-decline"
-                        className="flex-1 justify-between has-data-[state=checked]:bg-[#2A2722] has-data-[state=checked]:text-[#FFFDF3]"
+                        className="flex-1 justify-center has-data-[state=checked]:bg-ink has-data-[state=checked]:text-ivory"
                       >
-                        <Field className="items-center text-center cursor-pointer flex-1 border-[#2A2722] border rounded-sm">
-                          <FieldContent className="items-center justify-between">
+                        <Field className="items-center text-center cursor-pointer flex-1 border-ink border rounded-sm">
+                          <FieldContent className="items-center justify-center">
                             <FieldTitle className="uppercase text-[12px] tracking-[1px]">
                               {/* Regretfully Decline */}
                               Tidak Hadir
@@ -287,7 +287,7 @@ const Rsvp = () => {
                 <Field>
                   <FieldLabel
                     htmlFor="pax"
-                    className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
+                    className="text-taupe uppercase tracking-[2px] text-[10px]"
                   >
                     {/* Pax ( incl. yourself ) */}
                     Bilangan kehadiran (termasuk anda)
@@ -300,7 +300,7 @@ const Rsvp = () => {
                       <div className="flex justify-evenly">
                         <Button
                           type="button"
-                          className="size-10 rounded-full text-lg bg-[#FFFDF3] text-[#2A2722] border border-[#2A272220]"
+                          className="size-10 rounded-full text-lg bg-ivory text-ink border border-ink/12 hover:bg-accent"
                           onClick={() => {
                             if (Number(field.value) < 1) return;
                             field.onChange(Number(field.value) - 1);
@@ -314,7 +314,7 @@ const Rsvp = () => {
 
                         <Button
                           type="button"
-                          className="size-10 rounded-full text-lg bg-[#FFFDF3] text-[#2A2722] border border-[#2A272220]"
+                          className="size-10 rounded-full text-lg bg-ivory text-ink border border-ink/12 hover:bg-accent"
                           onClick={() => {
                             if (Number(field.value) >= 2) return;
                             field.onChange(Number(field.value) + 1);
@@ -333,7 +333,7 @@ const Rsvp = () => {
               <Field>
                 <FieldLabel
                   htmlFor="notes"
-                  className="text-[#6B6258] uppercase tracking-[2px] text-[10px]"
+                  className="text-taupe uppercase tracking-[2px] text-[10px]"
                 >
                   {/* A note for the couple (optional) */}
                   Ucapan untuk pasangan
@@ -348,7 +348,7 @@ const Rsvp = () => {
                       value={field.value || ""}
                       autoComplete="off"
                       placeholder="Tulis ucapan anda di sini."
-                      className="bg-[#FFFDF380] rounded-sm border border-[#2A272220] placeholder:text-sm text-md font-serif"
+                      className="bg-ivory/50 rounded-sm border border-ink/12 placeholder:text-sm text-md font-serif"
                     />
                   )}
                 />
@@ -356,7 +356,7 @@ const Rsvp = () => {
             </FieldGroup>
 
             <Button
-              className="w-full py-6 uppercase tracking-[2px] text-[13px] mt-5 bg-[#5C1F1F]"
+              className="w-full py-6 uppercase tracking-[2px] text-[13px] mt-5 bg-wine"
               type="submit"
               disabled={isSubmitting}
             >
