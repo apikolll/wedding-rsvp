@@ -27,7 +27,7 @@ import {
 
 import { z } from "zod";
 import { useRouter, useSearchParams } from "next/navigation";
-import { memo, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 
@@ -73,7 +73,7 @@ const showSuccessToast = (message: string, pax?: number) => {
   );
 };
 
-const Page = () => {
+const RsvpForm = () => {
   const queryClient = useQueryClient();
 
   const param = useSearchParams();
@@ -372,4 +372,12 @@ const Page = () => {
   );
 };
 
-export default memo(Page);
+// useSearchParams() needs a Suspense boundary, otherwise `next build` fails
+// for this route (it can't be prerendered without knowing ?ref=).
+const Page = () => (
+  <Suspense fallback={<div className="bg-card h-screen max-w-md mx-auto" />}>
+    <RsvpForm />
+  </Suspense>
+);
+
+export default Page;
