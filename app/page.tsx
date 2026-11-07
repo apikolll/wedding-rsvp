@@ -9,7 +9,6 @@ import Hero from "@/section/Hero";
 import InvitationDetails from "@/section/InvitationDetails";
 import Location from "@/section/Location";
 import WeddingItenary from "@/section/WeddingItinerary";
-import Image from "next/image";
 
 export default function Home() {
   const { play } = useAudioPlayer();

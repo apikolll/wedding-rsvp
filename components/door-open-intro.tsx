@@ -175,7 +175,7 @@ const DoorOpenIntro = ({
         {!isOpening && (
           <motion.div
             key="intro-screen"
-            className="fixed inset-0 z-40 flex items-center justify-center"
+            className="fixed inset-0 z-40 flex items-center justify-center h-screen"
             exit={{ opacity: 0 }}
             transition={{ duration: skipped ? 0 : 0.8, ease: "easeOut" }}
             onClick={handleOpen}
@@ -220,13 +220,15 @@ const DoorOpenIntro = ({
 
       {/* Coming back from /rsvp: fade the page in instead of popping in.
           Opacity only — a transform here would break the fixed nav bar while it runs. */}
-      <motion.div
-        initial={skipped ? { opacity: 0 } : false}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-      >
-        {children}
-      </motion.div>
+      {isOpening && (
+        <motion.div
+          initial={skipped ? { opacity: 0 } : false}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          {children}
+        </motion.div>
+      )}
     </IntroContext.Provider>
   );
 };
