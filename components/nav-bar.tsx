@@ -105,70 +105,69 @@ const NavBar = () => {
       }}
       className="fixed inset-x-0 bottom-3 z-40 px-4 pb-[env(safe-area-inset-bottom)]"
     >
-    <motion.nav
-      animate={{ y: hidden ? 140 : 0 }}
-      transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
-    >
-      <div className="liquid-glass relative mx-auto h-16 max-w-md rounded-full p-1.5">
-        {/* Glossy rim: SVG specular lighting on the pill's edge (every browser) */}
-        <svg
-          aria-hidden
-          className="pointer-events-none absolute inset-0 size-full overflow-visible"
-        >
-          <rect
-            width="100%"
-            height="100%"
-            rx="32"
-            fill="#fff"
-            filter="url(#lg-rim)"
-            opacity="0.9"
-          />
-        </svg>
+      <motion.nav
+        animate={{ y: hidden ? 140 : 0 }}
+        transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+      >
+        <div className="liquid-glass relative mx-auto h-16 max-w-md rounded-full p-1.5">
+          {/* Glossy rim: SVG specular lighting on the pill's edge (every browser) */}
+          <svg
+            aria-hidden
+            className="pointer-events-none absolute inset-0 size-full overflow-visible"
+          >
+            <rect
+              width="100%"
+              height="100%"
+              rx="32"
+              fill="#fff"
+              filter="url(#lg-rim)"
+              opacity="0.9"
+            />
+          </svg>
 
-        <div className="relative flex h-full items-center gap-1">
-          <Button
-            variant="ghost"
-            className={navItem}
-            onClick={handleClick}
-          >
-            <IconCalendarEvent stroke={1.75} className="size-5" />
-            Save Date
-          </Button>
-          <Button
-            variant="ghost"
-            className={navItem}
-            onClick={() => scrollToSection("location")}
-          >
-            <IconMapPin stroke={1.75} className="size-5" />
-            Maps
-          </Button>
-          <Button
-            className="h-full flex-[1.3] rounded-full bg-wine text-xs uppercase tracking-wider text-ivory shadow-[inset_0_1px_0_rgb(255_255_255/0.28),inset_0_-2px_4px_rgb(0_0_0/0.25),0_4px_12px_-4px_rgb(92_31_31/0.6)] hover:bg-wine/90"
-            onClick={() => router.push("/rsvp")}
-          >
-            R.S.V.P
-          </Button>
-          <Button
-            variant="ghost"
-            aria-label={playing ? "Pause music" : "Play music"}
-            className="size-12 shrink-0 rounded-full text-ink hover:bg-ivory/45 active:bg-ivory/60"
-            onClick={() => {
-              if (playing) {
-                pause();
-              } else {
-                play({ src: "/songs/wedding_nasheed.mp3" });
-              }
-            }}
-          >
-            {playing ? (
-              <IconPlayerPause stroke={1.75} className="size-5" />
-            ) : (
-              <IconPlayerPlay stroke={1.75} className="size-5" />
-            )}
-          </Button>
+          <div className="relative flex h-full items-center gap-1">
+            <Button variant="ghost" className={navItem} onClick={handleClick}>
+              <IconCalendarEvent stroke={1.75} className="size-5" />
+              Save Date
+            </Button>
+            <Button
+              variant="ghost"
+              className={navItem}
+              onClick={() => scrollToSection("location")}
+            >
+              <IconMapPin stroke={1.75} className="size-5" />
+              Maps
+            </Button>
+            <Button
+              className="h-full flex-[1.3] rounded-full bg-wine text-xs uppercase tracking-wider text-ivory shadow-[inset_0_1px_0_rgb(255_255_255/0.28),inset_0_-2px_4px_rgb(0_0_0/0.25),0_4px_12px_-4px_rgb(92_31_31/0.6)] hover:bg-wine/90"
+              onClick={() => {
+                // router.push("/rsvp");
+                scrollToSection("rsvp");
+              }}
+            >
+              R.S.V.P
+            </Button>
+            <Button
+              variant="ghost"
+              aria-label={playing ? "Pause music" : "Play music"}
+              className="size-12 shrink-0 rounded-full text-ink hover:bg-ivory/45 active:bg-ivory/60"
+              onClick={() => {
+                if (playing) {
+                  pause();
+                } else {
+                  play({ src: "/songs/wedding_nasheed.mp3" });
+                }
+              }}
+            >
+              {playing ? (
+                <IconPlayerPause stroke={1.75} className="size-5" />
+              ) : (
+                <IconPlayerPlay stroke={1.75} className="size-5" />
+              )}
+            </Button>
+          </div>
         </div>
-      </div>
-    </motion.nav>
+      </motion.nav>
     </motion.div>
   );
 };

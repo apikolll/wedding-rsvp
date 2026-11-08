@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 
 const InvitationDetails = () => {
   return (
-    <section id="invitation-details" className="mt-45">
+    <section id="invitation-details" className="mt-30">
       <div className="flex flex-col items-center">
         <h1 className="font-serif font-medium text-center text-2xl text-taupe">
           Walimatul Urus
@@ -39,7 +39,7 @@ const InvitationDetails = () => {
         <div className="mt-5 flex flex-col gap-10">
           <DetailContainer title="tempat">
             <div className="text-center">
-              <p className="text-center text-pretty w-xs font-serif font-medium text-xl">
+              <p className="text-center text-pretty w-xs font-serif font-medium text-xl tracking-tight leading-tight">
                 368, Lorong Rhu 3/2, Taman Rhu 3, Tikam Batu, 08600, Sungai
                 Petani, Kedah
               </p>

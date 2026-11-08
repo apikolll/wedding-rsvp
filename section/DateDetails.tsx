@@ -24,20 +24,20 @@ const DateDetails = () => {
         <div className="flex gap-10">
           <div className="inline-flex flex-col items-center gap-2">
             <Divider width={80} />
-            <p className="font-serif italic text-taupe">Disember</p>
+            <p className="font-serif italic text-taupe">Saturday</p>
             <Divider width={80} />
           </div>
 
           <div className="inline-flex flex-col items-center">
-            <p className="font-serif text-4xl">05</p>
-            <p className="font-serif text-lg italic text-muted-foreground">
+            <p className="font-allura text-4xl font-bold">05</p>
+            <p className="font-allura text-lg italic text-muted-foreground font-semibold">
               2026
             </p>
           </div>
 
           <div className="inline-flex flex-col items-center gap-2">
             <Divider width={80} />
-            <p className="font-serif italic text-taupe">11.00 Pagi</p>
+            <p className="font-serif italic text-taupe">December</p>
             <Divider width={80} />
           </div>
         </div>

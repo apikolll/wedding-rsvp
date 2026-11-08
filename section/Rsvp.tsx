@@ -14,7 +14,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 
-import Flower from "@/public/flowers/flower_5.svg";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -24,6 +23,7 @@ import { IconCalendar, IconCheck, IconUsers } from "@tabler/icons-react";
 import { z } from "zod";
 import { useSearchParams } from "next/navigation";
 import { memo, useEffect } from "react";
+import Image from "next/image";
 
 const schema = z.discriminatedUnion("status", [
   z.object({
@@ -41,7 +41,7 @@ const schema = z.discriminatedUnion("status", [
 
 const showSuccessToast = (message: string, pax?: number) => {
   return toast.custom(
-    (t) => (
+    () => (
       <div className="flex gap-3 items-start bg-white border border-zinc-200 rounded-xl p-4 shadow-lg max-w-sm">
         <div className="w-9 h-9 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
           <IconCheck size={18} strokeWidth={2.5} />
@@ -86,7 +86,7 @@ const Rsvp = () => {
 
   const {
     control,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid },
     handleSubmit,
     reset,
     watch,
@@ -177,193 +177,208 @@ const Rsvp = () => {
   }, [referenceNumber]);
 
   return (
-    <section id="rsvp" className="bg-card mt-10 pb-20 overflow-hidden">
-      <div className="text-center pt-15 flex flex-col gap-4 relative">
-        <p className="uppercase tracking-[3px] text-[10px] text-taupe">
-          Sila sahkan kehadiran
-        </p>
-        <h1 className="font-allura font-medium text-6xl">R.S.V.P</h1>
-        <p className="font-serif text-[14px] text-taupe italic">
-          sebelum 14 Jun 2026
-        </p>
-        <Flower className={"size-30 absolute -right-3 top-13"} />
-      </div>
+    <section className="relative flex flex-col mt-10">
+      <Image
+        width={100}
+        height={100}
+        alt="asd"
+        src={"/ring-heart-dark.svg"}
+        className="w-full object-fill mb-10 absolute left-0 top-0 opacity-60"
+        quality={75}
+      />
 
-      {/* RSVP Form  */}
-      <div className="px-5 mt-6">
-        <FormProvider {...methods}>
-          <form onSubmit={onSubmit}>
-            <FieldGroup>
-              <Controller
-                name="name"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <Field>
-                    <FieldLabel
-                      htmlFor="name"
-                      className="text-taupe uppercase tracking-[2px] text-[10px]"
-                    >
-                      Nama
-                    </FieldLabel>
-                    <Input
-                      {...field}
-                      autoComplete="off"
-                      placeholder="Nama anda"
-                      className="bg-ivory/50 rounded-sm py-5 border border-ink/12 placeholder:text-sm text-md font-serif"
-                      aria-invalid={!!error}
-                    />
-                    {error && (
-                      <FieldDescription className="text-destructive text-[10px]">
-                        {error.message}
-                      </FieldDescription>
-                    )}
-                  </Field>
-                )}
-              />
+      {/* Wrapper is not masked, so the title can sit in the card's notch */}
+      <div id="rsvp" className="relative mt-40 m-5">
+        {/* Sits in the cut-out, on the page background (see .corner-cut) */}
+        <div className="absolute left-0 top-0 z-10 flex w-40 h-14 items-center justify-center">
+          <h1 className="font-samantha font-medium text-2xl">R.S.V.P</h1>
+        </div>
 
-              <Field>
-                <FieldLabel
-                  htmlFor="status"
-                  className="text-taupe uppercase tracking-[2px] text-[10px]"
-                >
-                  {/* Will you attend ? */}
-                  Sahkan kehadiran anda
-                </FieldLabel>
+        <div className="corner-cut relative pb-10 overflow-hidden backdrop-blur-sm rounded-xl rounded-tl-none bg-linear-150 from-10% from-[#6B1A0F]/30 to-transparent">
+          {/* Header row: notch on the left, subtitle on the raised right part */}
+          <div className="flex justify-end min-h-20 pt-5 pr-5">
+            <p className="w-32 text-right uppercase tracking-[3px] text-[10px] leading-relaxed text-taupe">
+              Sila sahkan kehadiran
+            </p>
+          </div>
 
-                <Controller
-                  name="status"
-                  control={control}
-                  render={({ field }) => (
-                    <RadioGroup
-                      value={field.value}
-                      className="flex gap-3 justify-center max-w-sm mx-auto"
-                      onValueChange={(val) => {
-                        field.onChange(val);
-                      }}
-                    >
-                      <FieldLabel
-                        htmlFor="rsvp-accept"
-                        className="flex-1 justify-center has-data-[state=checked]:bg-ink has-data-[state=checked]:text-ivory"
-                      >
-                        <Field className="items-center text-center cursor-pointer flex-1 border-ink border rounded-sm">
-                          <FieldContent className="items-center justify-center">
-                            <FieldTitle className="uppercase text-[12px] tracking-[1px]">
-                              {/* Joyfully Accept */}
-                              Hadir
-                            </FieldTitle>
-                          </FieldContent>
-                          <RadioGroupItem
-                            value="accept"
-                            id="rsvp-accept"
-                            hidden
-                          />
-                        </Field>
-                      </FieldLabel>
-
-                      <FieldLabel
-                        htmlFor="rsvp-decline"
-                        className="flex-1 justify-center has-data-[state=checked]:bg-ink has-data-[state=checked]:text-ivory"
-                      >
-                        <Field className="items-center text-center cursor-pointer flex-1 border-ink border rounded-sm">
-                          <FieldContent className="items-center justify-center">
-                            <FieldTitle className="uppercase text-[12px] tracking-[1px]">
-                              {/* Regretfully Decline */}
-                              Tidak Hadir
-                            </FieldTitle>
-                          </FieldContent>
-                          <RadioGroupItem
-                            value="decline"
-                            id="rsvp-decline"
-                            hidden
-                          />
-                        </Field>
-                      </FieldLabel>
-                    </RadioGroup>
-                  )}
-                />
-              </Field>
-
-              {status === "accept" && (
-                <Field>
-                  <FieldLabel
-                    htmlFor="pax"
-                    className="text-taupe uppercase tracking-[2px] text-[10px]"
-                  >
-                    {/* Pax ( incl. yourself ) */}
-                    Bilangan kehadiran (termasuk anda)
-                  </FieldLabel>
-
+          {/* RSVP Form  */}
+          <div className="px-5">
+            <FormProvider {...methods}>
+              <form onSubmit={onSubmit}>
+                <FieldGroup>
                   <Controller
-                    name="pax"
+                    name="name"
                     control={control}
                     render={({ field, fieldState: { error } }) => (
-                      <div className="flex justify-evenly">
-                        <Button
-                          type="button"
-                          className="size-10 rounded-full text-lg bg-ivory text-ink border border-ink/12 hover:bg-accent"
-                          onClick={() => {
-                            if (Number(field.value) < 1) return;
-                            field.onChange(Number(field.value) - 1);
-                          }}
-                          disabled={Number(field.value) === 0}
+                      <Field>
+                        <FieldLabel
+                          htmlFor="name"
+                          className="text-taupe uppercase tracking-[2px] text-[10px]"
                         >
-                          -
-                        </Button>
-
-                        <p className="font-serif text-3xl">{field.value}</p>
-
-                        <Button
-                          type="button"
-                          className="size-10 rounded-full text-lg bg-ivory text-ink border border-ink/12 hover:bg-accent"
-                          onClick={() => {
-                            if (Number(field.value) >= 2) return;
-                            field.onChange(Number(field.value) + 1);
-                          }}
-                          disabled={Number(field.value) === 2}
-                          aria-invalid={error?.type === "too_small"}
-                        >
-                          +
-                        </Button>
-                      </div>
+                          Nama
+                        </FieldLabel>
+                        <Input
+                          {...field}
+                          autoComplete="off"
+                          placeholder="Nama anda"
+                          className="bg-ivory/50 rounded-sm py-5 border border-ink/12 placeholder:text-sm text-md font-serif"
+                          aria-invalid={!!error}
+                        />
+                        {error && (
+                          <FieldDescription className="text-destructive text-[10px]">
+                            {error.message}
+                          </FieldDescription>
+                        )}
+                      </Field>
                     )}
                   />
-                </Field>
-              )}
 
-              <Field>
-                <FieldLabel
-                  htmlFor="notes"
-                  className="text-taupe uppercase tracking-[2px] text-[10px]"
-                >
-                  {/* A note for the couple (optional) */}
-                  Ucapan untuk pasangan
-                </FieldLabel>
+                  <Field>
+                    <FieldLabel
+                      htmlFor="status"
+                      className="text-taupe uppercase tracking-[2px] text-[10px]"
+                    >
+                      {/* Will you attend ? */}
+                      Sahkan kehadiran anda
+                    </FieldLabel>
 
-                <Controller
-                  name="notes"
-                  control={control}
-                  render={({ field }) => (
-                    <Textarea
-                      {...field}
-                      value={field.value || ""}
-                      autoComplete="off"
-                      placeholder="Tulis ucapan anda di sini."
-                      className="bg-ivory/50 rounded-sm border border-ink/12 placeholder:text-sm text-md font-serif"
+                    <Controller
+                      name="status"
+                      control={control}
+                      render={({ field }) => (
+                        <RadioGroup
+                          value={field.value}
+                          className="flex gap-3 justify-center max-w-sm mx-auto"
+                          onValueChange={(val) => {
+                            field.onChange(val);
+                          }}
+                        >
+                          <FieldLabel
+                            htmlFor="rsvp-accept"
+                            className="flex-1 justify-center has-data-[state=checked]:bg-ink has-data-[state=checked]:text-ivory"
+                          >
+                            <Field className="items-center text-center cursor-pointer flex-1 border-ink border rounded-sm">
+                              <FieldContent className="items-center justify-center">
+                                <FieldTitle className="uppercase text-[12px] tracking-[1px]">
+                                  {/* Joyfully Accept */}
+                                  Hadir
+                                </FieldTitle>
+                              </FieldContent>
+                              <RadioGroupItem
+                                value="accept"
+                                id="rsvp-accept"
+                                hidden
+                              />
+                            </Field>
+                          </FieldLabel>
+
+                          <FieldLabel
+                            htmlFor="rsvp-decline"
+                            className="flex-1 justify-center has-data-[state=checked]:bg-ink has-data-[state=checked]:text-ivory"
+                          >
+                            <Field className="items-center text-center cursor-pointer flex-1 border-ink border rounded-sm">
+                              <FieldContent className="items-center justify-center">
+                                <FieldTitle className="uppercase text-[12px] tracking-[1px]">
+                                  {/* Regretfully Decline */}
+                                  Tidak Hadir
+                                </FieldTitle>
+                              </FieldContent>
+                              <RadioGroupItem
+                                value="decline"
+                                id="rsvp-decline"
+                                hidden
+                              />
+                            </Field>
+                          </FieldLabel>
+                        </RadioGroup>
+                      )}
                     />
-                  )}
-                />
-              </Field>
-            </FieldGroup>
+                  </Field>
 
-            <Button
-              className="w-full py-6 uppercase tracking-[2px] text-[13px] mt-5 bg-wine"
-              type="submit"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? <Spinner /> : "Hantar"}
-            </Button>
-          </form>
-        </FormProvider>
+                  {status === "accept" && (
+                    <Field>
+                      <FieldLabel
+                        htmlFor="pax"
+                        className="text-taupe uppercase tracking-[2px] text-[10px]"
+                      >
+                        {/* Pax ( incl. yourself ) */}
+                        Bilangan kehadiran (termasuk anda)
+                      </FieldLabel>
+
+                      <Controller
+                        name="pax"
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                          <div className="flex justify-evenly">
+                            <Button
+                              type="button"
+                              className="size-10 rounded-full text-lg bg-ivory text-ink border border-ink/12 hover:bg-accent"
+                              onClick={() => {
+                                if (Number(field.value) < 1) return;
+                                field.onChange(Number(field.value) - 1);
+                              }}
+                              disabled={Number(field.value) === 0}
+                            >
+                              -
+                            </Button>
+
+                            <p className="font-serif text-3xl">{field.value}</p>
+
+                            <Button
+                              type="button"
+                              className="size-10 rounded-full text-lg bg-ivory text-ink border border-ink/12 hover:bg-accent"
+                              onClick={() => {
+                                if (Number(field.value) >= 2) return;
+                                field.onChange(Number(field.value) + 1);
+                              }}
+                              disabled={Number(field.value) === 2}
+                              aria-invalid={error?.type === "too_small"}
+                            >
+                              +
+                            </Button>
+                          </div>
+                        )}
+                      />
+                    </Field>
+                  )}
+
+                  <Field>
+                    <FieldLabel
+                      htmlFor="notes"
+                      className="text-taupe uppercase tracking-[2px] text-[10px]"
+                    >
+                      {/* A note for the couple (optional) */}
+                      Ucapan untuk pasangan
+                    </FieldLabel>
+
+                    <Controller
+                      name="notes"
+                      control={control}
+                      render={({ field }) => (
+                        <Textarea
+                          {...field}
+                          value={field.value || ""}
+                          autoComplete="off"
+                          placeholder="Tulis ucapan anda di sini."
+                          className="bg-ivory/50 rounded-sm border border-ink/12 placeholder:text-sm text-md font-serif"
+                        />
+                      )}
+                    />
+                  </Field>
+                </FieldGroup>
+
+                <Button
+                  className="w-full py-6 uppercase tracking-[2px] text-[13px] mt-5 bg-wine"
+                  type="submit"
+                  disabled={isSubmitting || !isValid}
+                >
+                  {isSubmitting ? <Spinner /> : "Hantar"}
+                </Button>
+              </form>
+            </FormProvider>
+          </div>
+        </div>
       </div>
     </section>
   );

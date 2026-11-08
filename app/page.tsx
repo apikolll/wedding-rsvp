@@ -8,6 +8,7 @@ import Dua from "@/section/Dua";
 import Hero from "@/section/Hero";
 import InvitationDetails from "@/section/InvitationDetails";
 import Location from "@/section/Location";
+import Rsvp from "@/section/Rsvp";
 import WeddingItenary from "@/section/WeddingItinerary";
 
 export default function Home() {
@@ -32,6 +33,7 @@ export default function Home() {
         <InvitationDetails />
         <Location />
 
+        <Rsvp />
         <Dua />
         <NavBar />
       </DoorOpenIntro>

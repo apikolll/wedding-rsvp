@@ -241,3 +241,20 @@ html.lg-refract .liquid-blob {
 .animate-doorPulse {
   animation: doorPulse 2.4s ease-in-out infinite;
 }
+
+/* Folder-tab notch in the card's top-left corner (Rsvp.tsx): the left
+   part sits lower than the right, with a 14px radius on every turn, so
+   the page background shows through and the RSVP title sits in it.
+   Notch = 160×56px. Mask = full box minus this shape. If you change the
+   size, edit the viewBox, the path and the mask size together, and the
+   title box in Rsvp.tsx (w-40 h-14). */
+.corner-cut {
+  --corner-cut-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1 -1 175 71'%3E%3Cpath d='M-1 -1 H174 V0 A20 14 0 0 0 160 14V42A14 14 0 0 1 146 56H14A14 14 0 0 0 0 70H-1Z'/%3E%3C/svg%3E");
+  -webkit-mask:
+    var(--corner-cut-shape) -1px -1px / 175px 71px no-repeat,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    var(--corner-cut-shape) -1px -1px / 175px 71px no-repeat exclude,
+    linear-gradient(#000 0 0);
+}
