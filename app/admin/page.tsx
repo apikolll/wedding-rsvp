@@ -28,6 +28,7 @@ import { LinkList } from "./component/link-drawer";
 import { useGetLinks } from "./hooks/use-get-links";
 import { Button } from "@/components/ui/button";
 import { Status } from "@/generated/prisma-client";
+import { useQueryClient } from "@tanstack/react-query";
 
 dayjs.extend(LocalizedFormat);
 
@@ -35,6 +36,7 @@ const AdminPage = () => {
   useRSVPStream();
   const { data, isPending, isError, error } = useGetRSVP();
   const { data: links, isPending: isLinksPending } = useGetLinks();
+  const query = useQueryClient();
 
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
@@ -147,6 +149,14 @@ const AdminPage = () => {
     [data, isLinksPending],
   );
 
+  const handleDeleteRow = useCallback(
+    async (id: string) => {
+      await fetch(`/api/rsvp/${id}`, { method: "DELETE" });
+      await query.invalidateQueries({ queryKey: ["rsvp"] });
+    },
+    [query],
+  );
+
   if (isPending)
     return <Spinner className="absolute top-1/2 left-1/2 size-6" />;
 
@@ -247,7 +257,7 @@ const AdminPage = () => {
           }}
           className="cursor-pointer p-5 h-20"
         >
-          {"Afiq"}
+          {"Shafini"}
 
           <>
             <Badge
@@ -331,8 +341,17 @@ const AdminPage = () => {
                 <TableCell className="text-center text-pretty capitalize max-w-100 whitespace-break-spaces font-serif text-lg">
                   {item.notes || "N/A"}
                 </TableCell>
-                <TableCell>{item?.reference?.name ?? "Afiq"}</TableCell>
+                <TableCell>{item?.reference?.name ?? "Shafini"}</TableCell>
                 <TableCell>{dayjs(item.createdAt).format("LLL")}</TableCell>
+                <TableCell>
+                  <Button
+                    size="icon-sm"
+                    className="cursor-pointer"
+                    onClick={() => handleDeleteRow(item.id)}
+                  >
+                    <IconTrash />
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>
