@@ -40,6 +40,7 @@ const AdminPage = () => {
 
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
   const [afiqFilter, setAfiqFilter] = useState(false);
 
   const filteredData = useMemo(() => {
@@ -151,8 +152,21 @@ const AdminPage = () => {
 
   const handleDeleteRow = useCallback(
     async (id: string) => {
-      await fetch(`/api/rsvp/${id}`, { method: "DELETE" });
-      await query.invalidateQueries({ queryKey: ["rsvp"] });
+      setIsDeleting(true);
+      try {
+        const res = await fetch(`/api/rsvp/${id}`, { method: "DELETE" });
+
+        if (!res.ok) return;
+        const deletedData = await res.json();
+
+        await query.setQueryData(["rsvp"], (oldData: { id: string }[]) =>
+          oldData.filter((item) => item.id !== deletedData.id),
+        );
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsDeleting(false);
+      }
     },
     [query],
   );
@@ -348,6 +362,7 @@ const AdminPage = () => {
                     size="icon-sm"
                     className="cursor-pointer"
                     onClick={() => handleDeleteRow(item.id)}
+                    disabled={isDeleting}
                   >
                     <IconTrash />
                   </Button>

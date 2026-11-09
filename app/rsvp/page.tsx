@@ -47,7 +47,7 @@ const schema = z.discriminatedUnion("status", [
 
 const showSuccessToast = (message: string, pax?: number) => {
   return toast.custom(
-    (t) => (
+    () => (
       <div className="flex gap-3 items-start bg-white border border-zinc-200 rounded-xl p-4 shadow-lg max-w-sm">
         <div className="w-9 h-9 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
           <IconCheck size={18} strokeWidth={2.5} />
