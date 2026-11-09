@@ -15,7 +15,8 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { IconSearch, IconTrash } from "@tabler/icons-react";
+import { IconLogout, IconSearch, IconTrash } from "@tabler/icons-react";
+import { logout } from "./login/actions";
 import { Badge } from "@/components/ui/badge";
 import clsx from "clsx";
 import { useCallback, useMemo, useState } from "react";
@@ -183,8 +184,14 @@ const AdminPage = () => {
 
   return (
     <main className="px-5 pb-10 max-h-screen overflow-scroll">
-      <div className="mt-10">
+      <div className="relative mt-10">
         <h1 className="font-allura text-5xl text-center italic">RSVP data</h1>
+        <form action={logout} className="absolute right-0 top-1/2 -translate-y-1/2">
+          <Button type="submit" variant="ghost" size="sm" className="gap-1.5">
+            <IconLogout stroke={1.75} className="size-4" />
+            Log out
+          </Button>
+        </form>
       </div>
       <div className="flex justify-between gap-3 my-10 flex-col md:flex-row">
         <Card className="flex-1">
