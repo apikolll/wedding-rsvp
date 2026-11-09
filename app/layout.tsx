@@ -135,7 +135,8 @@ export default function RootLayout({
           <LiquidGlassFilters />
           <div aria-hidden className="fixed inset-0 -z-20">
             <Image
-              src="/background/FirstScreen.png"
+              // src="/background/FirstScreen.png"
+              src="https://umtctumwfvjpuk5g.public.blob.vercel-storage.com/First%20Screen.png"
               alt=""
               fill
               priority
