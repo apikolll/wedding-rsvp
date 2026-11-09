@@ -70,7 +70,7 @@ const WeddingItinerary = () => {
             <div className="relative">
               <div className="absolute -left-6.5 top-1.5 w-3 h-3 rounded-full border-2 bg-white "></div>
               <div className="font-serif text-ivory/90">
-                <p>4.30 petang</p>
+                <p>5.00 petang</p>
                 <h4 className="text-xl font-medium">Majlis selesai</h4>
               </div>
             </div>

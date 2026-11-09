@@ -24,7 +24,7 @@ const DateDetails = () => {
         <div className="flex gap-10">
           <div className="inline-flex flex-col items-center gap-2">
             <Divider width={80} />
-            <p className="font-serif italic text-taupe">Saturday</p>
+            <p className="font-serif italic text-taupe">Sabtu</p>
             <Divider width={80} />
           </div>
 
@@ -37,7 +37,7 @@ const DateDetails = () => {
 
           <div className="inline-flex flex-col items-center gap-2">
             <Divider width={80} />
-            <p className="font-serif italic text-taupe">December</p>
+            <p className="font-serif italic text-taupe">Disember</p>
             <Divider width={80} />
           </div>
         </div>

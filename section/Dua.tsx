@@ -19,11 +19,12 @@ const Dua = () => {
       <StarDivider theme="dark" />
 
       <div
-        className="font-gyahegi text-4xl text-center"
+        className="font-allura text-2xl text-center font-light"
         style={{ lineHeight: 1.5 }}
       >
-        <p>Shafini &</p>
-        <p>Shahril</p>
+        {/* <p>Shafini &</p>
+        <p>Shahril</p> */}
+        <p>#ShafiniallyWithShahril</p>
       </div>
       <p className="text-center mt-5 text-[10px] tracking-[2px] text-sand">
         05.12.2026
