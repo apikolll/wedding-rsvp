@@ -196,7 +196,7 @@ const DoorOpenIntro = ({
             />
 
             <motion.div
-              className="absolute bottom-20"
+              className="absolute bottom-35"
               animate={{ y: [0, 40] }}
               transition={{
                 repeat: Infinity,

@@ -81,20 +81,20 @@ const gyahegi = localFont({
 export const metadata: Metadata = {
   title: "Shafini & Shahril · Walimatulurus",
   description: "Sabtu, 05 Dec 2026 · Klik untuk RSVP 🤍",
-  metadataBase: new URL("https://cintahathiafiq.com"),
+  metadataBase: new URL("https://shafiniandshahril.my"),
   openGraph: {
     title: "Shafini & Shahril · Walimatulurus",
     description: "Sabtu, 05 Dec 2026 · Klik untuk RSVP 🤍",
-    url: "https://cintahathiafiq.com",
+    url: "https://shafiniandshahril.my",
     siteName: "Shafini & Shahril Wedding",
-    images: [
-      {
-        url: "/icon.png",
-        width: 1200,
-        height: 630,
-        alt: "Shafini & Shahril Wedding Invitation",
-      },
-    ],
+    // images: [
+    //   {
+    //     url: "/icon.png",
+    //     width: 1200,
+    //     height: 630,
+    //     alt: "Shafini & Shahril Wedding Invitation",
+    //   },
+    // ],
     locale: "ms_MY",
     type: "website",
   },
