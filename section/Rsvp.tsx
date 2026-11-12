@@ -329,10 +329,10 @@ const Rsvp = () => {
                               type="button"
                               className="size-10 rounded-full text-lg bg-ivory text-ink border border-ink/12 hover:bg-accent"
                               onClick={() => {
-                                if (Number(field.value) >= 2) return;
+                                if (Number(field.value) >= 10) return;
                                 field.onChange(Number(field.value) + 1);
                               }}
-                              disabled={Number(field.value) === 2}
+                              disabled={Number(field.value) === 10}
                               aria-invalid={error?.type === "too_small"}
                             >
                               +
