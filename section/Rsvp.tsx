@@ -29,7 +29,7 @@ const schema = z.discriminatedUnion("status", [
   z.object({
     name: z.string().min(1, "Name is required.").max(100, "Name too long"),
     status: z.literal("accept"),
-    pax: z.number().min(1, "Minimum pax is 1.").max(2, "Maximum pax is 2."),
+    pax: z.number().min(1, "Minimum pax is 1.").max(10, "Maximum pax is 10."),
     notes: z.string().max(300, "Notes is too long").nullable(),
   }),
   z.object({
